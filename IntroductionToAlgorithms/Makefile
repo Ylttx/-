@@ -1,3 +1,5 @@
+TEST_PATH = gtest
+
 CC = gcc
 
 INCDIRS 		:= include
@@ -13,7 +15,10 @@ VPATH			:= $(SRCDIRS)
 
 all : $(COBJS)
 
-.PHONY: clean
+test : $(COBJS)
+	@cd $(TEST_PATH) && make
+
+.PHONY: clean cleanall
 
 $(COBJS) : obj/%.o : %.c
 	@echo compiling $(notdir $<)
@@ -21,4 +26,8 @@ $(COBJS) : obj/%.o : %.c
 	@$(CC) $(INCLUDE) -c $< -o $@
 
 clean:
-	rm -rf obj
+	@rm -rf obj
+
+cleanall:
+	@rm -rf obj
+	@cd $(TEST_PATH) && make clean
