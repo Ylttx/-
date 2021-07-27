@@ -1,18 +1,15 @@
 #ifndef DISJOINT_SETS_H
 #define DISJOINT_SETS_H
 
-/**
- * 21.2 Linked-list representation of disjoint sets
- *      and with weighted-union heuristic.
- */
+#define NumSets 100
 
-#define T ListSet
-typedef struct T* T;
+typedef int DisjSet[ NumSets + 1];
+typedef int SetType;
+typedef int ElementType;
 
-extern void makeset(T set, int x);
+void Initialize( DisjSet S );
+void SetUnion( DisjSet S, SetType Root1, SetType Root2 );
+SetType Find( ElementType X, DisjSet S);
 
-extern int find(T set, int x);
-
-extern void unionset(T set, int x, int y);
 
 #endif
