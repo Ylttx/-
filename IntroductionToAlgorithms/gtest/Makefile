@@ -6,7 +6,7 @@ PROGRAM = run_src
 
 CPP 			:= g++
 CPPFLAGS      	:= -std=c++11
-LDFLAGS         := -lgtest -lpthread
+LDFLAGS         := -lgtest
 
 INCDIRS 		:= $(HOME_PATH)/include
 
@@ -38,7 +38,7 @@ $(TARGET) : $(OBJS)
 $(CCOBJS) : obj/%.o : %.cc
 	@echo compiling $(notdir $<)
 	@mkdir -p $(dir $@)
-	@$(CPP) $(CPPFLAGS) -o $@ -c $< $(INCLUDE) $(LDFLAGS)
+	@$(CPP) $(CPPFLAGS) -o $@ -c $< $(INCLUDE)
 
 .PHONY: clean
 
