@@ -43,3 +43,13 @@ TEST(sort, merge_sort) {
     for (int i = 0; i < 7; i++)
         EXPECT_EQ(A[i], B[i]);
 }
+
+TEST(sort, quick_sort) {
+    int A[] = {32,12,56,78,76,45,36};
+    int B[] = {12,32,36,45,56,76,78};
+
+    quick_sort(A, 0, 6);
+
+    for (int i = 0; i < 7; i++)
+        EXPECT_EQ(A[i], B[i]);
+}

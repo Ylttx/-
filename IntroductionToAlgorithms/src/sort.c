@@ -59,3 +59,32 @@ void merge_sort(int* A, int left, int right) {
         merge(A, left, mid, right);
     }
 }
+
+static int partition(int* A, int left, int right) {
+    int key = A[left];
+
+    while (left < right) {
+        while (left < right && A[right] >= key)
+            right--;
+        
+        if (left < right)
+            A[left++] = A[right];
+        
+        while (left < right && A[left] <= key)
+            left++;
+        
+        if (left < right)
+            A[right--] = A[left];
+    }
+    A[left] = key;
+
+    return left;
+}
+
+void quick_sort(int* A, int left, int right) {
+    if (left < right) {
+        int pos = partition(A, left, right);
+        quick_sort(A, left, pos - 1);
+        quick_sort(A, pos + 1, right);
+    }
+}

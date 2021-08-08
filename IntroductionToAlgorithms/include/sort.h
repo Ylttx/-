@@ -6,4 +6,6 @@ extern void insertion_down_sort(int* A, int n);
 
 extern void merge_sort(int* A, int left, int right);
 
+extern void quick_sort(int* A, int left, int right);
+
 #endif
