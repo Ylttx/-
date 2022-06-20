@@ -13,15 +13,15 @@ INCDIRS 		:= $(HOME_PATH)/include
 SRCDIRS			:= $(TEST_PATH) \
 				   src
 
-COBJECTS        := sort.o
+COBJECTS        := problem_set.o
 
-CCFILES			:= $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.cc))
+CCFILES			:= $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.cpp))
 
 INCLUDE			:= $(patsubst %, -I %, $(INCDIRS))
 
 CCFILENDIR		:= $(notdir  $(CCFILES))
 COBJS			:= $(patsubst %, $(HOME_PATH)/obj/%, $(COBJECTS))
-CCOBJS			:= $(patsubst %, obj/%, $(CCFILENDIR:.cc=.o))
+CCOBJS			:= $(patsubst %, obj/%, $(CCFILENDIR:.cpp=.o))
 OBJS            := $(COBJS) $(CCOBJS)
 
 VPATH			:= $(SRCDIRS)
@@ -35,7 +35,7 @@ $(TARGET) : $(OBJS)
 	@echo compiling $(notdir $<)
 	@$(CPP) $(CPPFLAGS) $^ -o $@ $(LDFLAGS)
 
-$(CCOBJS) : obj/%.o : %.cc
+$(CCOBJS) : obj/%.o : %.cpp
 	@echo compiling $(notdir $<)
 	@mkdir -p $(dir $@)
 	@$(CPP) $(CPPFLAGS) -o $@ -c $< $(INCLUDE)

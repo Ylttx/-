@@ -4,13 +4,14 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/local/include"
+                "/usr/local/include",
+                "/usr/local/include/gtest"
             ],
             "defines": [],
             "macFrameworkPath": [],
-            "compilerPath": "/usr/local/bin/gcc-10",
-            "cStandard": "gnu18",
-            "cppStandard": "gnu++14",
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "${default}",
+            "cppStandard": "c++11",
             "intelliSenseMode": "gcc-x64"
         }
     ],
