@@ -14,10 +14,6 @@ COBJS			:= $(patsubst %, obj/%, $(CFILENDIR:.cpp=.o))
 VPATH			:= $(SRCDIRS)
 
 all : $(COBJS)
-	@echo $(CFILES)
-	@echo $(CFILENDIR)
-	@echo $(COBJS)
-
 
 test : $(COBJS)
 	@cd $(TEST_PATH) && make
