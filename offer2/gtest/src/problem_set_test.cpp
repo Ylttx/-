@@ -31,3 +31,16 @@ TEST(P12_pivotIndex, WHEN_173_DO_THEN_neg_1) {
     EXPECT_EQ(pivotIndex(nums), -1);
 }
 
+TEST(P13_NumMatrix, WHEN_5x5_DO_21_43_THEN_8) {
+    vector<vector<int>> nums = {
+        {3,0,1,4,2},
+        {5,6,3,2,1},
+        {1,2,0,1,5},
+        {4,1,0,1,7},
+        {1,0,3,0,5}
+    };
+    NumMatrix nm(nums);
+
+    EXPECT_EQ(nm.sumRegion(2, 1, 4, 3), 8);
+}
+

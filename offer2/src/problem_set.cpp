@@ -47,3 +47,22 @@ int pivotIndex(const vector<int> &nums) {
     }
     return -1;
 }
+
+NumMatrix::NumMatrix(const vector<vector<int>> &matrix) {
+    sums.resize(matrix.size() + 1);
+    for (int i = 0; i < sums.size(); i++) {
+        sums[i].resize(matrix[0].size());
+    }
+ 
+    for (int i = 1; i <= matrix.size(); i++) {
+        int sum = 0;
+        for (int j = 1; j <= matrix[0].size(); j++) {
+            sum += matrix[i - 1][j - 1];
+            sums[i][j] = sum + sums[i - 1][j];
+        }
+    }
+}
+
+int NumMatrix::sumRegion(int row1, int col1, int row2, int col2) {
+    return sums[row2 + 1][col2 + 1] - sums[row1][col2 + 1] - sums[row2 + 1][col1] + sums[row1][col1];
+}
