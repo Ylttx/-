@@ -44,3 +44,14 @@ TEST(P13_NumMatrix, WHEN_5x5_DO_21_43_THEN_8) {
     EXPECT_EQ(nm.sumRegion(2, 1, 4, 3), 8);
 }
 
+TEST(P13_checkInclusion, WHEN_ac_dgcaf_DO_check_THEN_true) {
+    string s1 = "ac", s2 = "dgcaf";
+
+    EXPECT_TRUE(checkInclusion(s1, s2));
+}
+
+TEST(P13_checkInclusion, WHEN_ab_dgcaf_DO_check_THEN_false) {
+    string s1 = "ab", s2 = "dgcaf";
+
+    EXPECT_FALSE(checkInclusion(s1, s2));
+}

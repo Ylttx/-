@@ -2,6 +2,7 @@
 #define PROBLEM_SET_H
 
 #include <vector>
+#include <string>
 using namespace std;
 
 // P10: 和为k的子数组
@@ -22,5 +23,8 @@ public:
 private:
     vector<vector<int>> sums;
 };
+
+// P14: 字符串中的变位词
+bool checkInclusion(const string &s1, const string &s2);
 
 #endif

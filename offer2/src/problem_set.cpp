@@ -66,3 +66,39 @@ NumMatrix::NumMatrix(const vector<vector<int>> &matrix) {
 int NumMatrix::sumRegion(int row1, int col1, int row2, int col2) {
     return sums[row2 + 1][col2 + 1] - sums[row1][col2 + 1] - sums[row2 + 1][col1] + sums[row1][col1];
 }
+
+static bool areAllZero(int counts[]) {
+    for (int i = 0; i < 26; i++) {
+        if (counts[i] != 0) {
+            return  false;
+        }
+    }
+    return true;
+}
+
+bool checkInclusion(const string &s1, const string &s2) {
+    if (s1.length() > s2.length()) {
+        return false;
+    }
+
+    int counts[26] = {0};
+    int i = 0;
+    for (; i < s1.length(); i++) {
+        counts[s1[i] - 'a']++;
+        counts[s2[i] - 'a']--;
+    }
+
+    if (areAllZero(counts)) {
+        return true;
+    }
+
+    for (; i < s2.length(); i++) {
+        counts[s2[i] - 'a']--;
+        counts[s2[i - s1.length()] - 'a']++;
+        if (areAllZero(counts)) {
+            return true;
+        }
+    }
+
+    return false;
+}
