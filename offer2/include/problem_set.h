@@ -27,4 +27,7 @@ private:
 // P14: 字符串中的变位词
 bool checkInclusion(const string &s1, const string &s2);
 
+// P15: 字符串中的所有变位词
+vector<int> findAnagrams(const string &s1, const string &s2);
+
 #endif

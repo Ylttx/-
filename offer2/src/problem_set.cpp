@@ -102,3 +102,31 @@ bool checkInclusion(const string &s1, const string &s2) {
 
     return false;
 }
+
+vector<int> findAnagrams(const string &s1, const string &s2) {
+    vector<int> res;
+    if (s1.length() < s2.length()) {
+        return res;
+    }
+
+    int counts[26] = {0};
+    int i = 0;
+    for (; i < s2.length(); i++) {
+        counts[s2[i] - 'a']++;
+        counts[s1[i] - 'a']--;
+    }
+
+    if (areAllZero(counts)) {
+        res.push_back(0);
+    }
+
+    for (; i < s1.length(); i++) {
+        counts[s1[i] - 'a']--;
+        counts[s1[i - s2.length()] - 'a']++;
+        if (areAllZero(counts)) {
+            res.push_back(i - s2.length() + 1);
+        }
+    }
+
+    return res;
+}
