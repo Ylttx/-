@@ -130,3 +130,30 @@ vector<int> findAnagrams(const string &s1, const string &s2) {
 
     return res;
 }
+
+static bool hasGreaterThan1(int counts[]) {
+    for (int i = 0; i < 256; i++) {
+        if (counts[i] > 1) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int lengthOfLongestSubstring(const string &s) {
+    int length = 0;
+    int left = -1;
+    int counts[256] = {0};
+
+    for (int right = 0; right < s.length(); right++) {
+        counts[s[right]]++;
+        // while (hasGreaterThan1(counts)) {
+        while (counts[s[right]] > 1) {
+            left++;
+            counts[s[left]]--;
+        }
+        length = std::max(length, right - left);
+    }
+ 
+    return length;
+}

@@ -69,3 +69,15 @@ TEST(P15_findAnagrams, WHEN_s1_less_s2_DO_find_THEN_empty) {
  
     EXPECT_EQ(findAnagrams(s1, s2), res);
 }
+
+TEST(P16_lengthOfLongestSubstring, WHEN_babcca_DO_find_THEN_eq_3) {
+    string s = "babcca";
+ 
+    EXPECT_EQ(lengthOfLongestSubstring(s), 3);
+}
+
+TEST(P16_lengthOfLongestSubstring, WHEN_dfdgapfuy_DO_find_THEN_eq_7) {
+    string s = "dfdgapfuy";
+ 
+    EXPECT_EQ(lengthOfLongestSubstring(s), 7);
+}

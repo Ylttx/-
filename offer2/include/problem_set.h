@@ -30,4 +30,7 @@ bool checkInclusion(const string &s1, const string &s2);
 // P15: 字符串中的所有变位词
 vector<int> findAnagrams(const string &s1, const string &s2);
 
+// P16: 不含重复字符的最长子字符串
+int lengthOfLongestSubstring(const string &s);
+
 #endif

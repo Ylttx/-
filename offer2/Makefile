@@ -18,7 +18,10 @@ all : $(COBJS)
 test : $(COBJS)
 	@cd $(TEST_PATH) && make
 
-.PHONY: clean cleanall
+run_test:
+	@./gtest/run_test
+
+.PHONY: clean
 
 $(COBJS) : obj/%.o : src/%.cpp
 	@echo compiling $(notdir $<)
@@ -26,8 +29,5 @@ $(COBJS) : obj/%.o : src/%.cpp
 	@$(CC) $(INCLUDE) -c $< -o $@
 
 clean:
-	rm -rf obj
-
-cleanall:
 	rm -rf obj
 	@cd $(TEST_PATH) && make clean
