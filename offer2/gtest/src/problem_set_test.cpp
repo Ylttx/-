@@ -81,3 +81,15 @@ TEST(P16_lengthOfLongestSubstring, WHEN_dfdgapfuy_DO_find_THEN_eq_7) {
  
     EXPECT_EQ(lengthOfLongestSubstring(s), 7);
 }
+
+TEST(P17_minWindow, WHEN_ADDBANCAD_ABC_DO_minWindow_THEN_eq_BANC) {
+    string s = "ADDBANCAD", t = "ABC";
+ 
+    EXPECT_EQ(minWindow(s, t), "BANC");
+}
+
+TEST(P17_minWindow, WHEN_s_shorter_than_t_DO_minWindow_THEN_empty) {
+    string s = "AD", t = "ABC";
+ 
+    EXPECT_EQ(minWindow(s, t), "");
+}

@@ -157,3 +157,47 @@ int lengthOfLongestSubstring(const string &s) {
  
     return length;
 }
+
+string minWindow(const string &s, const string &t)
+{
+    map<char, int> counts;
+    for (const auto &c : t) {
+        counts[c] = counts.find(c) != counts.end() ? counts[c] + 1 : 1;
+    }
+
+    int cnt = counts.size();
+    size_t minLength = std::string::npos;
+    int start = 0, end = 0, minStart = 0, minEnd = 0;
+
+    while (end < s.length() || (end == s.length() && cnt == 0)) {
+        if (cnt > 0) {
+            char c = s[end];
+            if (counts.find(c) != counts.end()) {
+                counts[c] -= 1;
+                if (counts[c] == 0) {
+                    cnt--;
+                }
+            }
+
+            end++;
+        } else {
+            if (end - start < minLength) {
+                minLength = end - start;
+                minStart = start;
+                minEnd = end;
+            }
+
+            char c = s[start];
+            if (counts.find(c) != counts.end()) {
+                counts[c] += 1;
+                if (counts[c] == 1) {
+                    cnt++;
+                }
+            }
+
+            start++;
+        }
+    }
+
+    return minLength < std::string::npos ? s.substr(minStart, minLength) : "";
+}

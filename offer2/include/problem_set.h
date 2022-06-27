@@ -33,4 +33,7 @@ vector<int> findAnagrams(const string &s1, const string &s2);
 // P16: 不含重复字符的最长子字符串
 int lengthOfLongestSubstring(const string &s);
 
+// P17: 包含所有字符的最短字符串
+string minWindow(const string &s, const string &t);
+
 #endif
