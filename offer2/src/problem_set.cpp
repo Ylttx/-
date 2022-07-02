@@ -201,3 +201,81 @@ string minWindow(const string &s, const string &t)
 
     return minLength < std::string::npos ? s.substr(minStart, minLength) : "";
 }
+
+static bool isLetterOrDigit(char c) {
+    return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+static char toLowerCase(char c) {
+    return (c >= 'A' && c <= 'Z') ? c + 32 : c;
+}
+
+bool isPalindrome(const string &s) {
+    for (int i = 0, j = s.length() - 1; i < j;) {
+        if (!isLetterOrDigit(s[i])) {
+            i++;
+        } else if (!isLetterOrDigit(s[j])) {
+            j--;
+        } else {
+            if (toLowerCase(s[i]) != toLowerCase(s[j])) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+    }
+ 
+    return true;
+}
+
+static bool isPalindrome(const string &s, int i, int j) {
+    while (i < j) {
+        if (s[i] != s[j]) {
+            return false;
+        }
+        i++;
+        j--;
+    }
+ 
+    return true;
+}
+
+bool validPalindrome(const string &s) {
+    int i = 0, j = s.length() - 1;
+
+    while (i < j) {
+        if (s[i] != s[j]) {
+            break;
+        }
+        i++;
+        j--;
+    }
+
+    return i == s.length() / 2 || isPalindrome(s, i + 1, j) || isPalindrome(s, i, j - 1);
+}
+
+static int countPalindrome(const string &s, int start, int end) {
+    int count = 0;
+
+    while (start >= 0 && end < s.length() && s[start] == s[end]) {
+        count++;
+        start--;
+        end++;
+    }
+
+    return count;
+}
+
+int countSubstrings(const string &s) {
+    if (s.length() == 0) {
+        return 0;
+    }
+
+    int count = 0;
+    for (int i = 0; i < s.length(); i++) {
+        count += countPalindrome(s, i, i);
+        count += countPalindrome(s, i, i + 1);
+    }
+ 
+    return count;
+}

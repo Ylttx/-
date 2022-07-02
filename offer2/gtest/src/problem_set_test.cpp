@@ -93,3 +93,21 @@ TEST(P17_minWindow, WHEN_s_shorter_than_t_DO_minWindow_THEN_empty) {
  
     EXPECT_EQ(minWindow(s, t), "");
 }
+
+TEST(P18_isPalindrome, WHEN_DO_isPalindrome_THEN) {
+    EXPECT_TRUE(isPalindrome("Was it a cat I saw?"));
+    EXPECT_FALSE(isPalindrome("race a car"));
+}
+
+TEST(P19_validPalindrome, WHEN_DO_validPalindrome_THEN) {
+    EXPECT_TRUE(validPalindrome("abca"));
+    EXPECT_TRUE(validPalindrome("race a car"));
+    EXPECT_FALSE(validPalindrome("race ba car"));
+}
+
+TEST(P20_countSubstrings, WHEN_string_DO_countSubstrings_THEN_equal) {
+    EXPECT_EQ(countSubstrings("abc"), 3);
+    EXPECT_EQ(countSubstrings("aaa"), 6);
+    EXPECT_EQ(countSubstrings("zhyhz"), 7);
+    EXPECT_EQ(countSubstrings(""), 0);
+}

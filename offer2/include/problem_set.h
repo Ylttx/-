@@ -36,4 +36,13 @@ int lengthOfLongestSubstring(const string &s);
 // P17: 包含所有字符的最短字符串
 string minWindow(const string &s, const string &t);
 
+// P18: 有效的回文
+bool isPalindrome(const string &s);
+
+// P19: 最多删除一个字符得到回文
+bool validPalindrome(const string &s);
+
+// P20: 回文子字符串的个数
+int countSubstrings(const string &s);
+
 #endif
