@@ -1,6 +1,6 @@
 TEST_PATH = gtest
 
-CC = g++
+CC = g++ -std=c++11
 
 INCDIRS 		:= include
 
