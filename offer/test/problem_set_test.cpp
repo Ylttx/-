@@ -88,3 +88,45 @@ TEST(P4_find, WHEN_invalid_DO_find_THEN_false) {
     int *matrix = nullptr;
     EXPECT_FALSE(Find(matrix, 0, 0, 1));
 }
+
+TEST(P5_ReplaceBland, WHEN_have_blank_DO_replace_THEN_equal) {
+    char string[18] = "We are happy.";
+    ReplaceBland(string, 18);
+    EXPECT_STREQ(string, "We%20are%20happy.");
+
+    char string1[18] = " Weare happy.";
+    ReplaceBland(string1, 18);
+    EXPECT_STREQ(string1, "%20Weare%20happy.");
+
+    char string2[18] = "We arehappy. ";
+    ReplaceBland(string2, 18);
+    EXPECT_STREQ(string2, "We%20arehappy.%20");
+
+    char string3[18] = "Weare  happy.";
+    ReplaceBland(string3, 18);
+    EXPECT_STREQ(string3, "Weare%20%20happy.");
+
+    char string4[4] = " ";
+    ReplaceBland(string4, 4);
+    EXPECT_STREQ(string4, "%20");
+
+    char string5[10] = "   ";
+    ReplaceBland(string5, 10);
+    EXPECT_STREQ(string5, "%20%20%20");
+}
+
+TEST(P5_ReplaceBland, WHEN_no_blank_DO_replace_THEN_equal) {
+    char string[18] = "Wearehappy.";
+    ReplaceBland(string, 18);
+    EXPECT_STREQ(string, "Wearehappy.");
+}
+
+TEST(P5_ReplaceBland, WHEN_invalid_DO_replace_THEN_equal) {
+    char *string = nullptr;
+    ReplaceBland(string, 1);
+    EXPECT_TRUE(string == nullptr);
+
+    char string1[] = "";
+    ReplaceBland(string, sizeof(string1));
+    EXPECT_EQ(string1[0], '\0');
+}

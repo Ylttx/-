@@ -26,4 +26,7 @@ int getDuplication(const int *numbers, int length);
 // 面试题4: 二维数组中的查找
 bool Find(int *matrix, int rows, int columns, int number);
 
+// 面试题5: 替换空格
+void ReplaceBland(char string[], int length);
+
 #endif

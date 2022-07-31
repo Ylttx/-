@@ -112,3 +112,35 @@ bool Find(int *matrix, int rows, int columns, int number) {
 
     return false;
 }
+
+void ReplaceBland(char string[], int length) {
+    if (nullptr == string || length < 3) {
+        return;
+    }
+
+    int i = 0, size = 0, blank = 0;
+    while (string[i] != '\0') {
+        if (string[i] == ' ') {
+            ++blank;
+        }
+        ++size;
+        ++i;
+    }
+
+    int p1 = size - 1;
+    int p2 = p1 + 2 * blank;
+    if (p2 >= length) {
+        return;
+    }
+
+    while (p1 < p2) {
+        if (string[p1] != ' ') {
+            string[p2] = string[p1];
+            --p2;
+        } else {
+            p2 -= 3;
+            strncpy(string + p2 + 1, "%20", 3);
+        }
+        --p1;
+    }
+}
