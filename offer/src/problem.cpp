@@ -35,3 +35,60 @@ CMyString& CMyString::operator=(const CMyString &str) {
     
     return *this;
 }
+
+bool duplicate(int numbers[], int length, int *duplication) {
+    if (nullptr == numbers || length <= 0) {
+        return false;
+    }
+
+    for (int i = 0; i < length; ++i) {
+        if (numbers[i] < 0 || numbers[i] >= length) {
+            return false;
+        }
+    }
+
+    for (int i = 0; i < length; ++i) {
+        while (numbers[i] != i) {
+            int temp = numbers[i];
+            if (temp == numbers[temp]) {
+                *duplication = numbers[i];
+                return true;
+            }
+            numbers[i] = numbers[temp];
+            numbers[temp] = temp;
+        }
+    }
+    return false;
+}
+
+static int countNumbers(const int *numbers, int length, int start, int end) {
+    int res = 0;
+    for (int i = 0; i < length; i++) {
+        if (numbers[i] >= start && numbers[i] <= end) {
+            res++;
+        }
+    }
+    return res;
+}
+
+int getDuplication(const int *numbers, int length) {
+    if (nullptr == numbers || length < 2) {
+        return -1;
+    }
+
+    int start = 1, end = length - 1;
+    while (start <= end) {
+        int middle = ((end - start) >> 1) + start;
+        int count = countNumbers(numbers, length, start, middle);
+        if (count > middle - start + 1) {
+            if (start == end) {
+                return start;
+            }
+            end = middle;
+        } else {
+            start = middle + 1;
+        }
+    }
+
+    return -1;
+}

@@ -8,7 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_VERBOSE_MAKEFILE OFF) # 编译详细信息： make VERBOSE=1
 
-add_compile_options(-W -Wall -Werror -g)
+add_compile_options(-W -Wall -g)
 add_link_options(-rdynamic -g -fno-omit-frame-pointer)
 
 # option(ENABLE_UNIT_TESTS "Enable unit tests" ON)
