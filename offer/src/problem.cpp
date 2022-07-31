@@ -92,3 +92,23 @@ int getDuplication(const int *numbers, int length) {
 
     return -1;
 }
+
+bool Find(int *matrix, int rows, int columns, int number) {
+    if (nullptr == matrix || rows < 1 || columns < 1) {
+        return false;
+    }
+    
+    int r = 0, c = columns - 1;
+    while (r < rows && c >= 0) {
+        int x = matrix[r * columns + c];
+        if (x == number) {
+            return true;
+        } else if (x < number) {
+            ++r;
+        } else {
+            --c;
+        }
+    }
+
+    return false;
+}

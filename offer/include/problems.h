@@ -23,4 +23,7 @@ bool duplicate(int numbers[], int length, int *duplication);
 // 题目二：不修改数组找到重复的数字
 int getDuplication(const int *numbers, int length);
 
+// 面试题4: 二维数组中的查找
+bool Find(int *matrix, int rows, int columns, int number);
+
 #endif

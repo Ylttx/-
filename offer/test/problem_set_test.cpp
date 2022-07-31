@@ -57,5 +57,34 @@ TEST(P3_duplicate, WHEN_invalid_numbers_DO_getDuplicate_THEN_neg1) {
 
     int zero_numbers[] = {};
     EXPECT_EQ(getDuplication(zero_numbers, sizeof(zero_numbers) / sizeof(int)), -1);
+}
 
+TEST(P4_find, WHEN_exist_DO_find_THEN_true) {
+    int matrix[] = {
+        1,2,8,9,
+        2,4,9,12,
+        4,7,10,13,
+        6,8,11,15
+    };
+
+    EXPECT_TRUE(Find(matrix, 4, 4, 7));
+    EXPECT_TRUE(Find(matrix, 4, 4, 15));
+    EXPECT_TRUE(Find(matrix, 4, 4, 1));
+}
+TEST(P4_find, WHEN_not_exist_DO_find_THEN_false) {
+    int matrix[] = {
+        1,2,8,9,
+        2,4,9,12,
+        4,7,10,13,
+        6,8,11,15
+    };
+
+    EXPECT_FALSE(Find(matrix, 4, 4, 3));
+    EXPECT_FALSE(Find(matrix, 4, 4, 0));
+    EXPECT_FALSE(Find(matrix, 4, 4, 16));
+}
+
+TEST(P4_find, WHEN_invalid_DO_find_THEN_false) {
+    int *matrix = nullptr;
+    EXPECT_FALSE(Find(matrix, 0, 0, 1));
 }
