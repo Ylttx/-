@@ -1,5 +1,6 @@
 #include "problems.h"
 #include <string.h>
+#include <stack>
 #include <iostream>
 using namespace std;
 
@@ -142,5 +143,61 @@ void ReplaceBland(char string[], int length) {
             strncpy(string + p2 + 1, "%20", 3);
         }
         --p1;
+    }
+}
+
+void AddToTail(ListNode **pHead, int value) {
+    ListNode *pNew = new ListNode();
+    pNew->m_nKey = value;
+    pNew->m_pNext = nullptr;
+
+    if (*pHead == nullptr) {
+        *pHead = pNew;
+    } else {
+        ListNode *pNode = *pHead;
+        while (pNode->m_pNext) {
+            pNode = pNode->m_pNext;
+        }
+
+        pNode->m_pNext = pNew;
+    }
+}
+
+void ClearNode(ListNode **pHead) {
+    if (nullptr == pHead || nullptr == *pHead) {
+        return;
+    }
+
+    ListNode *pNode = *pHead;
+    while (pNode != nullptr) {
+        ListNode *pToDelete = pNode;
+        pNode = pNode->m_pNext;
+        delete pToDelete;
+        pToDelete = nullptr;
+    }
+}
+
+void PrintListReversingly_Iteratively(ListNode *pHead) {
+    stack<int> st;
+
+    ListNode *pNode = pHead;
+    while (pNode != nullptr) {
+        st.push(pNode->m_nKey);
+        pNode = pNode->m_pNext;
+    }
+
+    while (!st.empty()) {
+        cout << st.top() << " ";
+        st.pop();
+    }
+    cout << endl;
+}
+
+void PrintListReversingly_Recursively(ListNode *pHead) {
+    if (pHead) {
+        if (pHead->m_pNext) {
+            PrintListReversingly_Recursively(pHead->m_pNext);
+        }
+        cout << pHead->m_nKey << " ";
     }
 }

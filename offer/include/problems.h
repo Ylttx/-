@@ -29,4 +29,16 @@ bool Find(int *matrix, int rows, int columns, int number);
 // 面试题5: 替换空格
 void ReplaceBland(char string[], int length);
 
+// 面试题6: 从尾到头打印链表
+struct ListNode {
+    int m_nKey;
+    ListNode *m_pNext;
+};
+
+void AddToTail(ListNode **pHead, int value);
+void ClearNode(ListNode **pHead);
+
+void PrintListReversingly_Iteratively(ListNode *pHead);
+void PrintListReversingly_Recursively(ListNode *pHead);
+
 #endif
