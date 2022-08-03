@@ -89,44 +89,141 @@ TEST(P4_find, WHEN_invalid_DO_find_THEN_false) {
     EXPECT_FALSE(Find(matrix, 0, 0, 1));
 }
 
-TEST(P5_ReplaceBland, WHEN_have_blank_DO_replace_THEN_equal) {
+TEST(P5_ReplaceBlank, WHEN_have_blank_DO_replace_THEN_equal) {
     char string[18] = "We are happy.";
-    ReplaceBland(string, 18);
+    ReplaceBlank(string, 18);
     EXPECT_STREQ(string, "We%20are%20happy.");
 
     char string1[18] = " Weare happy.";
-    ReplaceBland(string1, 18);
+    ReplaceBlank(string1, 18);
     EXPECT_STREQ(string1, "%20Weare%20happy.");
 
     char string2[18] = "We arehappy. ";
-    ReplaceBland(string2, 18);
+    ReplaceBlank(string2, 18);
     EXPECT_STREQ(string2, "We%20arehappy.%20");
 
     char string3[18] = "Weare  happy.";
-    ReplaceBland(string3, 18);
+    ReplaceBlank(string3, 18);
     EXPECT_STREQ(string3, "Weare%20%20happy.");
 
     char string4[4] = " ";
-    ReplaceBland(string4, 4);
+    ReplaceBlank(string4, 4);
     EXPECT_STREQ(string4, "%20");
 
     char string5[10] = "   ";
-    ReplaceBland(string5, 10);
+    ReplaceBlank(string5, 10);
     EXPECT_STREQ(string5, "%20%20%20");
 }
 
-TEST(P5_ReplaceBland, WHEN_no_blank_DO_replace_THEN_equal) {
+TEST(P5_ReplaceBlank, WHEN_no_blank_DO_replace_THEN_equal) {
     char string[18] = "Wearehappy.";
-    ReplaceBland(string, 18);
+    ReplaceBlank(string, 18);
     EXPECT_STREQ(string, "Wearehappy.");
 }
 
-TEST(P5_ReplaceBland, WHEN_invalid_DO_replace_THEN_equal) {
+TEST(P5_ReplaceBlank, WHEN_invalid_DO_replace_THEN_equal) {
     char *string = nullptr;
-    ReplaceBland(string, 1);
+    ReplaceBlank(string, 1);
     EXPECT_TRUE(string == nullptr);
 
     char string1[] = "";
-    ReplaceBland(string, sizeof(string1));
+    ReplaceBlank(string, sizeof(string1));
     EXPECT_EQ(string1[0], '\0');
+}
+
+TEST(P6_ConstructBinaryTree, WHEN_incomplte_DO_construct_THEN_equal) {
+    int preorder[] = {1,2,4,7,3,5,6,8};
+    int inorder[] = {4,7,2,1,5,3,8,6};
+    const int length = (int) (sizeof(preorder) / sizeof(int));
+ 
+    BinaryTreeNode *expect[length];
+    for (int i = 1; i <= length; i++)
+        expect[i - 1] = new BinaryTreeNode(i);
+    expect[0]->m_pLeft = expect[1];
+    expect[0]->m_pRight = expect[2];
+    expect[1]->m_pLeft = expect[3];
+    expect[3]->m_pRight = expect[6];
+    expect[2]->m_pLeft = expect[4];
+    expect[2]->m_pRight = expect[5];
+    expect[5]->m_pLeft = expect[7];
+
+    BinaryTreeNode *result = Construct(preorder, inorder, length);
+    EXPECT_TRUE(BinaryTreeEqual(result, expect[0]));
+}
+
+TEST(P6_ConstructBinaryTree, WHEN_complte_DO_construct_THEN_equal) {
+    int preorder[] = {1,2,4,5,3,6,7};
+    int inorder[] = {4,2,5,1,6,3,7};
+    const int length = (int) (sizeof(preorder) / sizeof(int));
+ 
+    BinaryTreeNode *expect[length];
+    for (int i = 1; i <= length; i++)
+        expect[i - 1] = new BinaryTreeNode(i);
+    expect[0]->m_pLeft = expect[1];
+    expect[0]->m_pRight = expect[2];
+    expect[1]->m_pLeft = expect[3];
+    expect[1]->m_pRight = expect[4];
+    expect[2]->m_pLeft = expect[5];
+    expect[2]->m_pRight = expect[6];
+ 
+    try {
+        BinaryTreeNode *result = Construct(preorder, inorder, length);
+        EXPECT_TRUE(BinaryTreeEqual(result, expect[0]));
+    } catch (const char *c) {
+        std::cerr << c << std::endl;
+        ASSERT_TRUE(false);
+    }
+}
+
+TEST(P6_ConstructBinaryTree, WHEN_special_one_node_DO_construct_THEN_equal) {
+    int preorder[] = {1024};
+    int inorder[] = {1024};
+    const int length = (int) (sizeof(preorder) / sizeof(int));
+    BinaryTreeNode *expect = new BinaryTreeNode(1024);
+ 
+    BinaryTreeNode *result = Construct(preorder, inorder, length);
+ 
+    EXPECT_TRUE(BinaryTreeEqual(result, expect));
+}
+
+TEST(P6_ConstructBinaryTree, WHEN_special_only_left_DO_construct_THEN_equal) {
+    int preorder[] = {1,2,3};
+    int inorder[] = {3,2,1};
+    const int length = (int) (sizeof(preorder) / sizeof(int));
+    BinaryTreeNode *expect[length];
+    for (int i = 1; i <= length; i++)
+        expect[i - 1] = new BinaryTreeNode(i);
+    expect[0]->m_pLeft = expect[1];
+    expect[1]->m_pLeft = expect[2];
+
+    BinaryTreeNode *result = Construct(preorder, inorder, length);
+ 
+    EXPECT_TRUE(BinaryTreeEqual(result, expect[0]));
+}
+
+TEST(P6_ConstructBinaryTree, WHEN_special_only_right_DO_construct_THEN_equal) {
+    int preorder[] = {1,2,3};
+    int inorder[] = {1,2,3};
+    const int length = (int) (sizeof(preorder) / sizeof(int));
+    BinaryTreeNode *expect[length];
+    for (int i = 1; i <= length; i++)
+        expect[i - 1] = new BinaryTreeNode(i);
+    expect[0]->m_pLeft = expect[1];
+    expect[1]->m_pLeft = expect[2];
+
+    BinaryTreeNode *result = Construct(preorder, inorder, length);
+ 
+    EXPECT_TRUE(BinaryTreeEqual(result, expect[0]));
+}
+
+TEST(P6_ConstructBinaryTree, WHEN_invalid_DO_construct_THEN_throw) {
+    int *preorder = nullptr;
+    int inorder[] = {4,2,5,1,6,3,7};
+    EXPECT_EQ(Construct(preorder, inorder, 7), nullptr);
+    EXPECT_EQ(Construct(inorder, preorder, 7), nullptr);
+    EXPECT_EQ(Construct(preorder, preorder, 1), nullptr);
+    EXPECT_EQ(Construct(preorder, inorder, 0), nullptr);
+ 
+    int invalid_preorder[] = {1,2,4,5,3,7,6};
+    EXPECT_THROW(Construct(invalid_preorder, inorder, 7), const char *);
 }

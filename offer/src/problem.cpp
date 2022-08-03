@@ -1,7 +1,9 @@
 #include "problems.h"
 #include <string.h>
 #include <stack>
+#include <queue>
 #include <iostream>
+#include <exception>
 using namespace std;
 
 CMyString::CMyString(char *pData) : m_pData(nullptr) {
@@ -114,7 +116,7 @@ bool Find(int *matrix, int rows, int columns, int number) {
     return false;
 }
 
-void ReplaceBland(char string[], int length) {
+void ReplaceBlank(char string[], int length) {
     if (nullptr == string || length < 3) {
         return;
     }
@@ -200,4 +202,77 @@ void PrintListReversingly_Recursively(ListNode *pHead) {
         }
         cout << pHead->m_nKey << " ";
     }
+}
+
+bool BinaryTreeEqual(BinaryTreeNode *bt1, BinaryTreeNode *bt2) {
+    if (nullptr == bt1 || nullptr == bt2) {
+        return bt1 == bt2;
+    }
+
+    queue<BinaryTreeNode *> qbt1, qbt2;
+    qbt1.push(bt1);
+    qbt2.push(bt2);
+
+    while (!qbt1.empty() && !qbt2.empty()) {
+        auto size = qbt1.size();
+        if (size != qbt2.size())
+            break;
+
+        for (decltype(size) i = 0; i < size; i++) {
+            auto x = qbt1.front(), y = qbt2.front();
+            if (x->m_nValue != y->m_nValue) {
+                return false;
+            }
+            if (x->m_pLeft) qbt1.push(x->m_pLeft);
+            if (x->m_pRight) qbt1.push(x->m_pRight);
+            if (y->m_pLeft) qbt2.push(y->m_pLeft);
+            if (y->m_pRight) qbt2.push(y->m_pRight);
+            qbt1.pop();
+            qbt2.pop();
+        }
+    }
+
+    return qbt1.empty() && qbt2.empty();
+}
+
+static BinaryTreeNode *ConstructCore(int *startPreorder, int *endPreorder, int *startInorder, int *endInorder) {
+    int rootValue = startPreorder[0];
+    BinaryTreeNode *root = new BinaryTreeNode(rootValue);
+
+    if (startPreorder == endPreorder) {
+        if (startInorder == endInorder && *startPreorder == *startInorder) {
+            return root;
+        } else {
+            throw "preordoer != inorder";
+        }
+    }
+
+    // 在中序遍历序列找到根结点的值
+    int *rootInorder = startInorder;
+    while (rootInorder < endInorder && *rootInorder != rootValue) {
+        rootInorder++;
+    }
+
+    if (rootInorder == endInorder && *rootInorder != rootValue) {
+        throw "can't find rootInorder";
+    }
+
+    int leftLength = rootInorder - startInorder;
+    int *leftPreorderEnd = startPreorder + leftLength;
+    if (leftLength > 0) {
+        root->m_pLeft = ConstructCore(startPreorder + 1, leftPreorderEnd, startInorder, rootInorder - 1);
+    }
+    if (leftLength < endPreorder - startPreorder) {
+        root->m_pRight = ConstructCore(leftPreorderEnd + 1, endPreorder, rootInorder + 1, endInorder);
+    }
+
+    return root;
+}
+
+BinaryTreeNode *Construct(int *preorder, int *inorder, int length) {
+    if (nullptr == preorder || nullptr == inorder || length < 1) {
+        return nullptr;
+    }
+
+    return ConstructCore(preorder, preorder + length - 1, inorder, inorder + length - 1);
 }

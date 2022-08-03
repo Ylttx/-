@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "unordered_map": "c"
+        "unordered_map": "c",
+        "queue": "cpp",
+        "exception": "cpp"
     }
 }

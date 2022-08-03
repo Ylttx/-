@@ -27,7 +27,7 @@ int getDuplication(const int *numbers, int length);
 bool Find(int *matrix, int rows, int columns, int number);
 
 // 面试题5: 替换空格
-void ReplaceBland(char string[], int length);
+void ReplaceBlank(char string[], int length);
 
 // 面试题6: 从尾到头打印链表
 struct ListNode {
@@ -40,5 +40,18 @@ void ClearNode(ListNode **pHead);
 
 void PrintListReversingly_Iteratively(ListNode *pHead);
 void PrintListReversingly_Recursively(ListNode *pHead);
+
+// 面试题7: 重建二叉树
+struct BinaryTreeNode {
+    int m_nValue;
+    BinaryTreeNode *m_pLeft;
+    BinaryTreeNode *m_pRight;
+
+    BinaryTreeNode(int value): m_nValue(value), m_pLeft(nullptr), m_pRight(nullptr) {}
+};
+
+bool BinaryTreeEqual(BinaryTreeNode *bt1, BinaryTreeNode *bt2);
+
+BinaryTreeNode *Construct(int *preorder, int *inorder, int length);
 
 #endif
