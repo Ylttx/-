@@ -227,3 +227,31 @@ TEST(P6_ConstructBinaryTree, WHEN_invalid_DO_construct_THEN_throw) {
     int invalid_preorder[] = {1,2,4,5,3,7,6};
     EXPECT_THROW(Construct(invalid_preorder, inorder, 7), const char *);
 }
+
+TEST(P7_GetNextBTNode, WHEN_incomplete_DO_getnext_THEN_equal) {
+    const int length = 9;
+    BinaryTreeNode *expect[length];
+    for (int i = 1; i <= length; i++)
+        expect[i - 1] = new BinaryTreeNode(i);
+    expect[0]->m_pLeft = expect[1];
+    expect[0]->m_pRight = expect[2];
+    expect[1]->m_pLeft = expect[3];
+    expect[1]->m_pRight = expect[4];
+    expect[2]->m_pLeft = expect[5];
+    expect[2]->m_pRight = expect[6];
+    expect[4]->m_pLeft = expect[7];
+    expect[4]->m_pRight = expect[8];
+
+    expect[1]->m_pParent = expect[0];
+    expect[2]->m_pParent = expect[0];
+    expect[3]->m_pParent = expect[1];
+    expect[4]->m_pParent = expect[1];
+    expect[5]->m_pParent = expect[2];
+    expect[6]->m_pParent = expect[2];
+    expect[7]->m_pParent = expect[4];
+    expect[8]->m_pParent = expect[4];
+
+    EXPECT_EQ(GetNext(expect[0]), expect[5]);
+    EXPECT_EQ(GetNext(expect[8]), expect[0]);
+    EXPECT_EQ(GetNext(expect[6]), nullptr);
+}

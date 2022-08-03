@@ -46,12 +46,16 @@ struct BinaryTreeNode {
     int m_nValue;
     BinaryTreeNode *m_pLeft;
     BinaryTreeNode *m_pRight;
+    BinaryTreeNode *m_pParent;
 
-    BinaryTreeNode(int value): m_nValue(value), m_pLeft(nullptr), m_pRight(nullptr) {}
+    BinaryTreeNode(int value): m_nValue(value), m_pLeft(nullptr), m_pRight(nullptr), m_pParent(nullptr) {}
 };
 
 bool BinaryTreeEqual(BinaryTreeNode *bt1, BinaryTreeNode *bt2);
 
 BinaryTreeNode *Construct(int *preorder, int *inorder, int length);
+
+// 面试题8: 二叉树的下一个节点
+BinaryTreeNode *GetNext(BinaryTreeNode *pNode);
 
 #endif

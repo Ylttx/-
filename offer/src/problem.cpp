@@ -276,3 +276,28 @@ BinaryTreeNode *Construct(int *preorder, int *inorder, int length) {
 
     return ConstructCore(preorder, preorder + length - 1, inorder, inorder + length - 1);
 }
+
+BinaryTreeNode *GetNext(BinaryTreeNode *pNode) {
+    if (nullptr == pNode)
+        return nullptr;
+
+    BinaryTreeNode *pNext = nullptr;
+
+    if (pNode->m_pRight != nullptr) {
+        BinaryTreeNode *pRight = pNode->m_pRight;
+        while (pRight->m_pLeft != nullptr) {
+            pRight = pRight->m_pLeft;
+        }
+        pNext = pRight;
+    } else if (pNode->m_pParent != nullptr) {
+        BinaryTreeNode *pCurrent = pNode;
+        BinaryTreeNode *pParent = pNode->m_pParent;
+        while (pParent != nullptr && pParent->m_pRight == pCurrent) {
+            pCurrent = pParent;
+            pParent = pParent->m_pParent;
+        }
+        pNext = pParent;
+    }
+
+    return pNext;
+}
