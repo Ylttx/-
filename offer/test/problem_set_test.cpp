@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <vector>
 #include "problems.h"
 
 TEST(P1_CMyString, WHEN_helloworld_DO_assign_THEN_equal) {
@@ -254,4 +255,20 @@ TEST(P7_GetNextBTNode, WHEN_incomplete_DO_getnext_THEN_equal) {
     EXPECT_EQ(GetNext(expect[0]), expect[5]);
     EXPECT_EQ(GetNext(expect[8]), expect[0]);
     EXPECT_EQ(GetNext(expect[6]), nullptr);
+}
+
+TEST(P8_CQueue, WHEN_12345_DO_push_THEN_12345) {
+    CQueue<int> cq;
+    std::vector<int> result;
+    std::vector<int> expect = {1,2,3,4,5};
+ 
+    for (int i = 1; i <= 5; ++i) {
+        cq.appendTail(i);
+    }
+
+    for (int i = 1; i <= 5; ++i) {
+        result.push_back(cq.deleteHead());
+    }
+
+    EXPECT_EQ(result, expect);
 }

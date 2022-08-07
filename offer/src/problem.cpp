@@ -1,8 +1,6 @@
 #include "problems.h"
 #include <string.h>
-#include <stack>
 #include <queue>
-#include <iostream>
 #include <exception>
 using namespace std;
 
@@ -301,3 +299,9 @@ BinaryTreeNode *GetNext(BinaryTreeNode *pNode) {
 
     return pNext;
 }
+
+// 模版类方法定义：必须在类名指定模版参数，否则报错 error: 'CQueue' is not a class, namespace, or enumeration
+// template <typename T>
+// void CQueue<T>::appendTail(const T &node) {
+//     cout << "test" << node << endl;
+// }

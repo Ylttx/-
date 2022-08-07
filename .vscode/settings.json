@@ -2,6 +2,7 @@
     "files.associations": {
         "unordered_map": "c",
         "queue": "cpp",
-        "exception": "cpp"
+        "exception": "cpp",
+        "stack": "cpp"
     }
 }

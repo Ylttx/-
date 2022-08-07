@@ -1,6 +1,9 @@
 #ifndef PROBLEMS_H
 #define PROBLEMS_H
 
+#include <stack>
+#include <iostream>
+
 // 面试题1: 赋值运算符函数
 class CMyString {
 public:
@@ -58,4 +61,35 @@ BinaryTreeNode *Construct(int *preorder, int *inorder, int length);
 // 面试题8: 二叉树的下一个节点
 BinaryTreeNode *GetNext(BinaryTreeNode *pNode);
 
+// 面试题9: 用两个栈实现队列
+template <typename T>
+class CQueue {
+public:
+    CQueue(void) {}
+    ~CQueue(void) {}
+
+    // 模版类的方法定义需要放在头文件中，否则link错误
+    // https://stackoverflow.com/questions/1639797/template-issue-causes-linker-error-c
+    void appendTail(const T &node) {
+        stack1.push(node);
+    }
+
+    T deleteHead(void) {
+        if (stack2.empty()) {
+            while (!stack1.empty()) {
+                stack2.push(stack1.top());
+                stack1.pop();
+            }
+        }
+        
+        T res = stack2.top();
+        stack2.pop();
+        return res;
+    }
+
+private:
+    std::stack<T> stack1;
+    std::stack<T> stack2;
+};
+ 
 #endif
