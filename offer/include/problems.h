@@ -92,4 +92,10 @@ private:
     std::stack<T> stack2;
 };
  
+// 面试题10: 斐波那契数列
+// 题目一：求斐波那契数列的第n项
+long long Fibonacci_recursively(unsigned int n);
+long long Fibonacci_iteratively(unsigned int n);
+// 题目二：青蛙跳台阶问题 —— 就是斐波那契数列
+
 #endif

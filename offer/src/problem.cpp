@@ -305,3 +305,19 @@ BinaryTreeNode *GetNext(BinaryTreeNode *pNode) {
 // void CQueue<T>::appendTail(const T &node) {
 //     cout << "test" << node << endl;
 // }
+
+long long Fibonacci_recursively(unsigned int n) {
+    return n <= 1 ? n : (Fibonacci_recursively(n - 1) + Fibonacci_recursively(n - 2));
+}
+
+long long Fibonacci_iteratively(unsigned int n) {
+    int x = 0, y = 1, z = n;
+
+    for (unsigned int i = 2; i <= n; ++i) {
+        z = x + y;
+        x = y;
+        y = z;
+    }
+
+    return z;
+}

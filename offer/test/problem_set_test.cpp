@@ -257,7 +257,7 @@ TEST(P7_GetNextBTNode, WHEN_incomplete_DO_getnext_THEN_equal) {
     EXPECT_EQ(GetNext(expect[6]), nullptr);
 }
 
-TEST(P8_CQueue, WHEN_12345_DO_push_THEN_12345) {
+TEST(P9_CQueue, WHEN_12345_DO_push_THEN_12345) {
     CQueue<int> cq;
     std::vector<int> result;
     std::vector<int> expect = {1,2,3,4,5};
@@ -271,4 +271,11 @@ TEST(P8_CQueue, WHEN_12345_DO_push_THEN_12345) {
     }
 
     EXPECT_EQ(result, expect);
+}
+
+TEST(P10_Fibonacci, WHEN_valid_DO_compare_THEN_equal) {
+    EXPECT_EQ(Fibonacci_iteratively(10), Fibonacci_recursively(10));
+    EXPECT_EQ(Fibonacci_iteratively(0), Fibonacci_recursively(0));
+    EXPECT_EQ(Fibonacci_iteratively(1), Fibonacci_recursively(1));
+    EXPECT_EQ(Fibonacci_iteratively(2), Fibonacci_recursively(2));
 }
