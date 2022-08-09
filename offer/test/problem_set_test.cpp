@@ -334,3 +334,12 @@ TEST(P12_hasPath, WHEN_null_matrix_DO_hasPath_THEN_false) {
     char *matrix = nullptr;
     EXPECT_FALSE(hasPath(matrix, 0, 0, "0"));
 }
+
+TEST(P12_movingCount, WHEN_2x2_matrix_DO_count_THEN_equal) {
+    EXPECT_EQ(movingCount(2, 2, 2), 4);
+    EXPECT_EQ(movingCount(3, 2, 2), 4);
+    EXPECT_EQ(movingCount(100, 2, 2), 4);
+    EXPECT_EQ(movingCount(1, 2, 2), 3);
+    EXPECT_EQ(movingCount(0, 2, 2), 1);
+    EXPECT_EQ(movingCount(-1, 2, 2), 0);
+}

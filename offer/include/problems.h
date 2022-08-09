@@ -105,4 +105,7 @@ int Min(int *numbers, int length);
 // 面试题12: 矩阵中的路径
 bool hasPath(char *matrix, int rows, int cols, const char *str);
 
+// 面试题13: 机器人的运动范围
+int movingCount(int threshold, int rows, int cols);
+
 #endif
