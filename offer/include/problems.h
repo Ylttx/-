@@ -98,4 +98,7 @@ long long Fibonacci_recursively(unsigned int n);
 long long Fibonacci_iteratively(unsigned int n);
 // 题目二：青蛙跳台阶问题 —— 就是斐波那契数列
 
+// 面试题11: 旋转数组的最小数字
+int Min(int *numbers, int length);
+
 #endif

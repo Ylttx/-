@@ -321,3 +321,44 @@ long long Fibonacci_iteratively(unsigned int n) {
 
     return z;
 }
+
+static int MinInOrder(int *numbers, int left, int right) {
+    int min = numbers[left];
+
+    for (int i = left + 1; i <= right; ++i) {
+        min = std::min(numbers[i], min);
+    }
+
+    return min;
+}
+
+int Min(int *numbers, int length) {
+    if (nullptr == numbers || length < 1) {
+        throw "Invalid Parameters";
+    }
+
+    int left = 0, right = length - 1;
+    int mid = left;
+
+    while (numbers[left] >= numbers[right]) {
+        if (right - left == 1) {
+            mid = right;
+            break;
+        }
+ 
+        mid = (right - left) / 2 + left;
+        if (numbers[mid] == numbers[left] && numbers[mid] == numbers[right]) {
+            return MinInOrder(numbers, left, right);
+        }
+        
+        if (numbers[mid] >= numbers[left]) {
+            left = mid;
+        } else if (numbers[mid] <= numbers[right]) {
+            right = mid;
+        } else {
+            throw "Invalid Sequence";
+        }
+    }
+
+    return numbers[mid];
+}

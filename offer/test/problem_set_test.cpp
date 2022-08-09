@@ -279,3 +279,18 @@ TEST(P10_Fibonacci, WHEN_valid_DO_compare_THEN_equal) {
     EXPECT_EQ(Fibonacci_iteratively(1), Fibonacci_recursively(1));
     EXPECT_EQ(Fibonacci_iteratively(2), Fibonacci_recursively(2));
 }
+
+TEST(P11_Min, WHEN_any_12345_DO_find_min_THEN_equal_1) {
+    int numbers[] = {3,4,5,1,2};
+    EXPECT_EQ(Min(numbers, 5), 1);
+
+    int numbers1[] = {1,2,3,4,5};
+    EXPECT_EQ(Min(numbers1, 5), 1);
+}
+
+TEST(P11_Min, WHEN_invalid_DO_find_min_THEN_throw) {
+    int numbers[] = {5,4,3,2,1};
+    EXPECT_THROW(Min(numbers, 5), const char *);
+
+    int *numbers1 = nullptr;
+}
