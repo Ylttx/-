@@ -101,4 +101,8 @@ long long Fibonacci_iteratively(unsigned int n);
 // 面试题11: 旋转数组的最小数字
 int Min(int *numbers, int length);
 
+// 2.4.3 回溯法
+// 面试题12: 矩阵中的路径
+bool hasPath(char *matrix, int rows, int cols, const char *str);
+
 #endif

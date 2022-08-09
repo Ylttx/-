@@ -362,3 +362,49 @@ int Min(int *numbers, int length) {
 
     return numbers[mid];
 }
+
+bool hasPathCore(char *matrix, int rows, int cols, const char *str, int row, int col, int &length, bool *visited) {
+    if (str[length] == '\0') {
+        return true;
+    }
+
+    bool result = false;
+    if (row >= 0 && row < rows && col >= 0 && col < cols &&
+        matrix[row * cols + col] == str[length] && !visited[row * cols + col]) {
+        ++length;
+        visited[row * cols + col] = true;
+        result = hasPathCore(matrix, rows, cols, str, row + 1, col, length, visited)
+                || hasPathCore(matrix, rows, cols, str, row, col + 1, length, visited)
+                || hasPathCore(matrix, rows, cols, str, row - 1, col, length, visited)
+                || hasPathCore(matrix, rows, cols, str, row, col - 1, length, visited);
+
+        if (!result) {
+            --length;
+            visited[row * cols + col] = false;
+        }
+    }
+    
+    return result;
+}
+
+bool hasPath(char *matrix, int rows, int cols, const char *str) {
+    if (nullptr == matrix || rows < 1 || cols < 1 || nullptr == str) {
+        return false;
+    }
+
+    bool *visited = new bool[rows * cols];
+    memset(visited, 0, rows * cols);
+    int length = 0;
+
+    for (int row = 0; row < rows; ++row) {
+        for (int col = 0; col < cols; ++col) {
+            if (hasPathCore(matrix, rows, cols, str, row, col, length, visited)) {
+                delete[] visited;
+                return true;
+            }
+        }
+    }
+
+    delete[] visited;
+    return false;
+}

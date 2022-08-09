@@ -293,4 +293,44 @@ TEST(P11_Min, WHEN_invalid_DO_find_min_THEN_throw) {
     EXPECT_THROW(Min(numbers, 5), const char *);
 
     int *numbers1 = nullptr;
+    EXPECT_THROW(Min(numbers1, 0), const char *);
+}
+
+TEST(P12_hasPath, WHEN_exist_DO_hasPath_THEN_true) {
+    char matrix[] = {
+        'a', 'b', 't', 'g',
+        'c', 'f', 'c', 's',
+        'j', 'd', 'e', 'h'
+    };
+
+    EXPECT_TRUE(hasPath(matrix, 3, 4, "bfce"));
+}
+
+TEST(P12_hasPath, WHEN_not_exist_DO_hasPath_THEN_false) {
+    char matrix[] = {
+        'a', 'b', 't', 'g',
+        'c', 'f', 'c', 's',
+        'j', 'd', 'e', 'h'
+    };
+
+    EXPECT_FALSE(hasPath(matrix, 3, 4, "abfb"));
+}
+
+TEST(P12_hasPath, WHEN_borde_matrix_DO_hasPath_THEN_true) {
+    char matrix[] = {'a', 'b', 't', 'g'};
+
+    EXPECT_TRUE(hasPath(matrix, 1, 4, "bt"));
+    EXPECT_TRUE(hasPath(matrix, 4, 1, "gt"));
+
+    char same_matrix[] = {
+        'a', 'a', 'a', 'a',
+        'a', 'a', 'a', 'a'
+    };
+
+    EXPECT_TRUE(hasPath(same_matrix, 2, 4, "aaaaaa"));
+}
+
+TEST(P12_hasPath, WHEN_null_matrix_DO_hasPath_THEN_false) {
+    char *matrix = nullptr;
+    EXPECT_FALSE(hasPath(matrix, 0, 0, "0"));
 }
