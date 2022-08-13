@@ -113,4 +113,8 @@ int movingCount(int threshold, int rows, int cols);
 int maxProductAfterCutting_dp(int length);
 int maxProductAfterCutting_greedy(int length);
 
+// 2.4.5 位运算
+// 面试题15: 二进制中1的个数
+int NumberOf1(int n);
+
 #endif

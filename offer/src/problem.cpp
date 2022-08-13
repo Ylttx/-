@@ -492,3 +492,14 @@ int maxProductAfterCutting_greedy(int length) {
 
     return std::pow(3, timesOf3) * std::pow(2, timesOf2);
 }
+
+int NumberOf1(int n) {
+    int count = 0;
+
+    while (n) {
+        ++count;
+        n &= n - 1;
+    }
+
+    return count;
+}

@@ -359,3 +359,11 @@ TEST(P14_cutting, WHEN_greedy_DO_cut_THEN_equal) {
     EXPECT_EQ(maxProductAfterCutting_greedy(2), 1);
     EXPECT_EQ(maxProductAfterCutting_greedy(3), 2);
 }
+
+TEST(P15_NumberOf1, WHEN_valid_DO_calc_THEN_equal) {
+    EXPECT_EQ(NumberOf1(1), 1);
+    EXPECT_EQ(NumberOf1(0x7fffffff), 31);
+    EXPECT_EQ(NumberOf1(0x80000000), 1);
+    EXPECT_EQ(NumberOf1(0xffffffff), 32);
+    EXPECT_EQ(NumberOf1(0), 0);
+}
