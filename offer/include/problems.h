@@ -108,4 +108,9 @@ bool hasPath(char *matrix, int rows, int cols, const char *str);
 // 面试题13: 机器人的运动范围
 int movingCount(int threshold, int rows, int cols);
 
+// 2.4.4 动态规划与贪婪算法
+// 面试题14: 剪绳子
+int maxProductAfterCutting_dp(int length);
+int maxProductAfterCutting_greedy(int length);
+
 #endif
