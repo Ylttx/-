@@ -503,3 +503,288 @@ int NumberOf1(int n) {
 
     return count;
 }
+
+double Power(double base, int exponent) {
+    if (0 == base)
+        return 0;
+    if (0 == exponent)
+        return 1;
+ 
+    double ret = 1;
+    bool positive = exponent > 0;
+    exponent = std::abs(exponent);
+    while (exponent--)
+    {
+        ret *= base;
+    }
+
+    return positive ? ret : 1.0 / ret;
+}
+
+void DeleteNode(ListNode** pListHead, ListNode* pToBeDeleted) {
+    if (!pListHead || !pToBeDeleted)
+        return;
+    
+    if (pToBeDeleted->m_pNext) {
+        ListNode* pNext = pToBeDeleted->m_pNext;
+        pToBeDeleted->m_nKey = pNext->m_nKey;
+        pToBeDeleted->m_pNext = pNext->m_pNext;
+
+        delete pNext;
+        pNext = nullptr;
+    } else if (pToBeDeleted == *pListHead) {
+        delete pToBeDeleted;
+        pToBeDeleted = nullptr;
+        *pListHead = nullptr;
+    } else {
+        ListNode* pNode = *pListHead;
+        while (pNode->m_pNext != pToBeDeleted)
+            pNode = pNode->m_pNext;
+        pNode->m_pNext = nullptr;
+        delete pToBeDeleted;
+        pToBeDeleted = nullptr;
+    }
+}
+
+void DeleteDuplication(ListNode** pHead) {
+    if (!pHead || !(*pHead))
+        return;
+    
+    ListNode* pPrev = nullptr;
+    ListNode* pNode = *pHead;
+
+    while (pNode) {
+        bool needDelete = false;
+        ListNode* pNext = pNode->m_pNext;
+        if (pNext && pNext->m_nKey == pNode->m_nKey)
+            needDelete = true;
+        
+        if (!needDelete) {
+            pPrev = pNode;
+            pNode = pNext;
+        } else {
+            int value = pNode->m_nKey;
+            ListNode* pToBeDel = pNode;
+            while (pToBeDel && pToBeDel->m_nKey == value) {
+                pNext = pToBeDel->m_pNext;
+                delete pToBeDel;
+                pToBeDel = pNext;
+            }
+
+            if (!pPrev)
+                *pHead = pNode;
+            else
+                pPrev->m_pNext = pNext;
+            pNode = pNext;
+        }
+    }
+}
+
+static bool matchCore(const char* str, const char* pattern) {
+    if (*str == '\0' && *pattern == '\0')
+        return true;
+    
+    if (*str != '\0' && *pattern == '\0')
+        return false;
+
+    if (*(pattern + 1) == '*') {
+        if (*str == *pattern || (*pattern == '.' && *str != '\0')) {
+            return matchCore(str + 1, pattern + 2) ||
+                    matchCore(str + 1, pattern) ||
+                    matchCore(str, pattern + 2);
+        } else {
+            return matchCore(str, pattern + 2);
+        }
+    }
+
+    if (*str == *pattern || (*pattern == '.' && *str != '\0'))
+        return matchCore(str + 1, pattern + 1);
+ 
+    return false;
+}
+
+bool match(const char* str, const char* pattern) {
+    if (!str || !pattern)
+        return false;
+    
+    return matchCore(str, pattern);
+}
+
+static bool scanUnsignedInteger(const char** str) {
+    const char* before = *str;
+
+    while (**str != '\0' && **str >= '0' && **str <= '9')
+        ++(*str);
+
+    return *str > before;
+}
+
+static bool scanInteger(const char** str) {
+    if (**str == '+' || **str == '-')
+        ++(*str);
+    return scanUnsignedInteger(str);
+}
+
+bool isNumeric(const char* str) {
+    if (str == nullptr)
+        return false;
+
+    bool numeric = scanInteger(&str);
+
+    if (*str == '.') {
+        ++str;
+        numeric = scanUnsignedInteger(&str) || numeric;
+    }
+
+    if (*str == 'e' || *str == 'E') {
+        ++str;
+        numeric = numeric && scanInteger(&str);
+    }
+
+    return numeric && *str == '\0';
+}
+
+void ReorderOddEven(int* pData, unsigned int length) {
+    if (!pData || !length)
+        return;
+    
+    int* pBegin = pData;
+    int* pEnd = pData + length - 1;
+
+    while (pBegin < pEnd)
+    {
+        while (pBegin < pEnd && (*pBegin & 1) != 0)
+            pBegin++;
+        
+        while (pBegin < pEnd && (*pEnd & 1) == 0)
+            pEnd--;
+        
+        if (pBegin < pEnd) {
+            int temp = *pBegin;
+            *pBegin = *pEnd;
+            *pEnd = temp;
+        }
+    }
+}
+
+ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+    if (!pListHead || !k)
+        return nullptr;
+    
+    ListNode* pFast = pListHead;
+
+    // 快指针先走k-1步伐
+    while (--k && pFast != nullptr)
+        pFast = pFast->m_pNext;
+    
+    if (!pFast)
+        return nullptr;
+    
+    ListNode* pSlow = pListHead;
+    while (pFast->m_pNext) {
+        pFast = pFast->m_pNext;
+        pSlow = pSlow->m_pNext;
+    }
+    
+    return pSlow;
+}
+
+ListNode* MeetingNode(ListNode* pHead) {
+    if (!pHead)
+        return nullptr;
+    
+    ListNode* pSlow = pHead->m_pNext;
+    if (!pSlow)
+        return nullptr;
+    
+    ListNode* pFast = pSlow->m_pNext;
+    while (pFast && pFast != pSlow) {
+        pSlow = pSlow->m_pNext;
+        pFast = pFast->m_pNext;
+        if (pFast)
+            pFast = pFast->m_pNext;
+    }
+
+    return pFast;
+}
+
+ListNode* EntryNodeOfLoop(ListNode* pHead) {
+    ListNode* pMeeting = MeetingNode(pHead);
+    if (!pMeeting)
+        return nullptr;
+
+    ListNode* pSlow = pHead;
+    while (pSlow != pMeeting) {
+        pSlow = pSlow->m_pNext;
+        pMeeting = pMeeting->m_pNext;
+    }
+
+    return pSlow;
+}
+
+ListNode* ReverseList(ListNode* pHead) {
+    ListNode* pPrev = nullptr;
+    ListNode* pCur = pHead;
+    ListNode* pNext;
+
+    while (pCur != nullptr) {
+        pNext = pCur->m_pNext;
+        pCur->m_pNext = pPrev;
+        pPrev = pCur;
+        pCur = pNext;
+    }
+
+    return pPrev;
+}
+
+ListNode* Merge(ListNode* pHead1, ListNode* pHead2) {
+    if (!pHead1)
+        return pHead2;
+    if (!pHead2)
+        return pHead1;
+    
+    ListNode* pRet = nullptr;
+
+    if (pHead1->m_nKey < pHead2->m_nKey) {
+        pRet = pHead1;
+        pRet->m_pNext = Merge(pHead1->m_pNext, pHead2);
+    }
+    else {
+        pRet = pHead2;
+        pRet->m_pNext = Merge(pHead1, pHead2->m_pNext);
+    }
+
+    return pRet;
+}
+
+static bool Equal(double num1, double num2) {
+    return (num1 - num2 > -0.0000001 && num1 - num2 < 0.0000001);
+}
+
+static bool DoseTree1HaveTree2(BinaryTreeNodeDouble* pRoot1, BinaryTreeNodeDouble* pRoot2) {
+    if (!pRoot2)
+        return true;
+    if (!pRoot1)
+        return false;
+    
+    if (!Equal(pRoot1->m_dbValue, pRoot2->m_dbValue))
+        return false;
+    
+    return DoseTree1HaveTree2(pRoot1->m_pLeft, pRoot2->m_pLeft) &&
+        DoseTree1HaveTree2(pRoot1->m_pRight, pRoot2->m_pRight);
+}
+
+bool HasSubtree(BinaryTreeNodeDouble* pRoot1, BinaryTreeNodeDouble* pRoot2) {
+    bool bRet = false;
+
+    if (pRoot1 && pRoot2) {
+        if (Equal(pRoot1->m_dbValue, pRoot2->m_dbValue))
+            bRet = DoseTree1HaveTree2(pRoot1, pRoot2);
+        if (!bRet)
+            bRet = HasSubtree(pRoot1->m_pLeft, pRoot2);
+        if (!bRet)
+            bRet = HasSubtree(pRoot1->m_pRight, pRoot2);
+    }
+
+    return bRet;
+}

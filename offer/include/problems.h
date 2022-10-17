@@ -117,4 +117,55 @@ int maxProductAfterCutting_greedy(int length);
 // 面试题15: 二进制中1的个数
 int NumberOf1(int n);
 
+// 面试题16: 数值的整数次方
+double Power(double base, int exponent);
+
+// 面试题18: 删除链表的节点
+// 题目一：在O(1)时间内删除链表节点。
+void DeleteNode(ListNode** pListHead, ListNode* pToBeDeleted);
+
+// 题目二：删除链表中重复的节点
+void DeleteDuplication(ListNode** pHead);
+
+// 面试题19: 正则表达式匹配
+bool match(const char* str, const char* pattern);
+
+/**
+ * @brief 面试题20: 表示数值的字符串
+ * @param str 数字的字符串表示
+ * @return true: 遵循模式 A[.[B]][e|E[C]]  .B[e|EC]
+ */
+bool isNumeric(const char* str);
+
+/**
+ * @brief 面试题21: 调整数组顺序使奇数位于偶数前面
+ * 可扩展性：函数指针
+ * @param pData
+ * @param length
+ */
+void ReorderOddEven(int* pData, unsigned int length);
+
+// 3.4 代码的鲁棒性
+// 面试题22: 链表中倒数第k个节点
+ListNode* FindKthToTail(ListNode* pListHead, unsigned int k);
+
+// 面试题23: 链表中环的入口节点
+ListNode* EntryNodeOfLoop(ListNode* pHead);
+
+// 面试题24: 反转链表
+ListNode* ReverseList(ListNode* pHead);
+
+// 面试题25: 合并两个排序的链表
+ListNode* Merge(ListNode* pHead1, ListNode* pHead2);
+
+struct BinaryTreeNodeDouble {
+    double m_dbValue;
+    BinaryTreeNodeDouble* m_pLeft;
+    BinaryTreeNodeDouble* m_pRight;
+};
+
+// 面试题26: 树的子结构
+bool HasSubtree(BinaryTreeNodeDouble* pRoot1, BinaryTreeNodeDouble* pRoot2);
+
+
 #endif

@@ -367,3 +367,185 @@ TEST(P15_NumberOf1, WHEN_valid_DO_calc_THEN_equal) {
     EXPECT_EQ(NumberOf1(0xffffffff), 32);
     EXPECT_EQ(NumberOf1(0), 0);
 }
+
+TEST(P16_Power, WHEN_valid_DO_power_THEN_equal) {
+    EXPECT_EQ(Power(2, 3), 8);
+    EXPECT_EQ(Power(2, -3), 0.125);
+}
+
+TEST(P18_DeleteNode, WHEN_123_DO_Delete2_THEN_13) {
+    ListNode* ln3 = new ListNode{3, nullptr};
+    ListNode* ln2 = new ListNode{2, ln3};
+    ListNode* ln1 = new ListNode{1, ln2};
+
+    DeleteNode(&ln1, ln2);
+    
+    EXPECT_EQ(ln1->m_pNext->m_nKey, ln2->m_nKey);
+    delete ln2;
+    delete ln1;
+}
+
+TEST(P18_DeleteNode, WHEN_123_DO_Delete1_THEN_23) {
+    ListNode* ln3 = new ListNode{3, nullptr};
+    ListNode* ln2 = new ListNode{2, ln3};
+    ListNode* ln1 = new ListNode{1, ln2};
+
+    DeleteNode(&ln1, ln1);
+ 
+    EXPECT_EQ(ln1->m_nKey, 2);
+    delete ln3;
+    delete ln1;
+}
+
+TEST(P18_DeleteNode, WHEN_OneNode_DO_Delete_THEN_null) {
+    ListNode* ln = new ListNode{0, nullptr};
+
+    DeleteNode(&ln, ln);
+
+    EXPECT_TRUE(ln == nullptr);
+}
+
+TEST(P18_DeleteNode, WHEN_Invalid_DO_Delete_THEN_null) {
+    ListNode* ln = new ListNode{999, nullptr};
+
+    DeleteNode(&ln, nullptr);
+    DeleteNode(nullptr, nullptr);
+
+    EXPECT_EQ(ln->m_nKey, 999);
+
+    delete ln;
+}
+
+TEST(P18_DeleteDuplication, WHEN_Valid_DO_Delete_THEN_succ) {
+    ListNode* ln[7];
+    ln[6] = new ListNode{5, nullptr};
+    ln[5] = new ListNode{4, ln[6]};
+    ln[4] = new ListNode{3, ln[5]};
+    ln[3] = new ListNode{3, ln[4]};
+    ln[2] = new ListNode{2, ln[3]};
+    ln[1] = new ListNode{2, ln[2]};
+    ln[0] = new ListNode{1, ln[1]};
+
+    DeleteDuplication(&ln[0]);
+    EXPECT_EQ(ln[0]->m_pNext, ln[5]);
+    delete ln[0];
+    delete ln[5];
+    delete ln[6];
+}
+
+TEST(P19_match, WHEN_match_DO_match_THEN_true) {
+    EXPECT_TRUE(match("aaa", "a.a"));
+    EXPECT_TRUE(match("aaa", "ab*ac*a"));
+}
+
+TEST(P19_match, WHEN_not_match_DO_match_THEN_false) {
+    EXPECT_FALSE(match("aaa", "aa.a"));
+    EXPECT_FALSE(match("aaa", "ab*a"));
+}
+
+TEST(P20_isNumeric, WHEN_valid_DO_test_THEN_true) {
+    EXPECT_TRUE(isNumeric("+100"));
+    EXPECT_TRUE(isNumeric("5e2"));
+    EXPECT_TRUE(isNumeric("-123"));
+    EXPECT_TRUE(isNumeric("3.1416"));
+    EXPECT_TRUE(isNumeric("-1E-16"));
+}
+
+TEST(P20_isNumeric, WHEN_invalid_DO_test_THEN_false) {
+    EXPECT_FALSE(isNumeric("12e"));
+    EXPECT_FALSE(isNumeric("1a3.14"));
+    EXPECT_FALSE(isNumeric("1.2.3"));
+    EXPECT_FALSE(isNumeric("+-5"));
+    EXPECT_FALSE(isNumeric("12e+5.4"));
+}
+
+TEST(P21_ReorderOddEven, WHEN_12345_DO_reorder_THEN_15342) {
+    int data[] = {1,2,3,4,5};
+    int expect[] = {1,5,3,4,2};
+    auto length = (unsigned int) (sizeof(data) / sizeof(int));
+    ReorderOddEven(data, length);
+    EXPECT_EQ(memcmp(data, expect, sizeof(data)), 0);
+}
+
+TEST(P22_FindKthToTail, WHEN_12345_DO_find_3_THEN_3) {
+    ListNode ln5{5, nullptr};
+    ListNode ln4{4, &ln5};
+    ListNode ln3{3, &ln4};
+    ListNode ln2{2, &ln3};
+    ListNode ln1{1, &ln2};
+
+    EXPECT_EQ(FindKthToTail(&ln1, 3), &ln3);
+    EXPECT_EQ(FindKthToTail(&ln1, 6), nullptr);
+    EXPECT_EQ(FindKthToTail(&ln1, 0), nullptr);
+    EXPECT_EQ(FindKthToTail(nullptr, 1), nullptr);
+}
+
+TEST(P23_EntryNodeOfLoop, WHEN_exist_DO_find_THEN_3) {
+    ListNode ln6{6, nullptr};
+    ListNode ln5{5, &ln6};
+    ListNode ln4{4, &ln5};
+    ListNode ln3{3, &ln4};
+    ListNode ln2{2, &ln3};
+    ListNode ln1{1, &ln2};
+    ln6.m_pNext = &ln3;
+
+    EXPECT_EQ(EntryNodeOfLoop(&ln1), &ln3);
+}
+
+TEST(P23_EntryNodeOfLoop, WHEN_not_exist_DO_find_THEN_nullptr) {
+    ListNode ln2{2, nullptr};
+    ListNode ln1{1, &ln2};
+
+    EXPECT_EQ(EntryNodeOfLoop(&ln1), nullptr);
+    EXPECT_EQ(EntryNodeOfLoop(&ln2), nullptr);
+    EXPECT_EQ(EntryNodeOfLoop(nullptr), nullptr);
+}
+
+TEST(P24_ReverseList, WHEN_abc_DO_reverse_THEN_cba) {
+    ListNode lnc{'c', nullptr};
+    ListNode lnb{'b', &lnc};
+    ListNode lna{'a', &lnb};
+
+    EXPECT_EQ(ReverseList(&lnc), &lnc);
+    EXPECT_EQ(ReverseList(&lna), &lnc);
+    EXPECT_EQ(ReverseList(nullptr), nullptr);
+}
+
+TEST(P25_Merge, WHEN_any_input_DO_merge_THEN_equal) {
+    ListNode ln7{7, nullptr};
+    ListNode ln5{5, &ln7};
+    ListNode ln3{3, &ln5};
+    ListNode ln1{1, &ln3};
+
+    ListNode ln8{8, nullptr};
+    ListNode ln6{6, &ln8};
+    ListNode ln4{4, &ln6};
+    ListNode ln2{2, &ln4};
+
+    EXPECT_EQ(Merge(&ln1, &ln2), &ln1);
+ 
+    int list[8] = {0}, expect[] = {1,2,3,4,5,6,7,8}, i = 0;
+    ListNode* pNode = &ln1;
+    while (pNode != nullptr) {
+        list[i++] = pNode->m_nKey;
+        pNode = pNode->m_pNext;
+    }
+
+    EXPECT_EQ(memcmp(list, expect, sizeof(list)), 0);
+}
+
+TEST(P26_HasSubtree, WHEN_valid_DO_HasSubtree_THEN_true) {
+    BinaryTreeNodeDouble bt4{4., nullptr, nullptr};
+    BinaryTreeNodeDouble bt7{7., nullptr, nullptr};
+    BinaryTreeNodeDouble bt9{9., nullptr, nullptr};
+    BinaryTreeNodeDouble bt2{2., &bt4, &bt7};
+    BinaryTreeNodeDouble bt8{8., &bt9, &bt2};
+    BinaryTreeNodeDouble bt77{7., nullptr, nullptr};
+    BinaryTreeNodeDouble bt1{8., &bt8, &bt77};
+
+    BinaryTreeNodeDouble bt92{9., nullptr, nullptr};
+    BinaryTreeNodeDouble bt22{2., nullptr, nullptr};
+    BinaryTreeNodeDouble bt28{8., &bt92, &bt22};
+ 
+    EXPECT_TRUE(HasSubtree(&bt1, &bt28));
+}
