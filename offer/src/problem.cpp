@@ -788,3 +788,77 @@ bool HasSubtree(BinaryTreeNodeDouble* pRoot1, BinaryTreeNodeDouble* pRoot2) {
 
     return bRet;
 }
+
+void MirrorRecursively(BinaryTreeNode* pNode) {
+    if (!pNode || (!pNode->m_pLeft && !pNode->m_pRight))
+        return;
+    
+    BinaryTreeNode* pTemp = pNode->m_pLeft;
+    pNode->m_pLeft = pNode->m_pRight;
+    pNode->m_pRight = pTemp;
+
+    MirrorRecursively(pNode->m_pLeft);
+    MirrorRecursively(pNode->m_pRight);
+}
+
+static bool isSymmetricalRecursively(BinaryTreeNode* pRoot1, BinaryTreeNode* pRoot2) {
+    if (!pRoot1 && !pRoot2)
+        return true;
+    if (!pRoot1 || !pRoot2)
+        return false;
+    if (pRoot1->m_nValue != pRoot2->m_nValue)
+        return false;
+    
+    return isSymmetricalRecursively(pRoot1->m_pLeft, pRoot2->m_pRight) &&
+            isSymmetricalRecursively(pRoot1->m_pRight, pRoot2->m_pLeft);
+}
+
+bool isSymmetrical(BinaryTreeNode* pRoot) {
+    return isSymmetricalRecursively(pRoot, pRoot);
+}
+
+// For test
+int p29_numbers[20] = {0};
+int p29_ptr = 0;
+
+static void printNumber(int number) {
+    cout << number << " ";
+    p29_numbers[p29_ptr++] = number;
+}
+
+static void PrintMatrixInCircle(int** numbers, int columns, int rows, int start) {
+    int endX = columns - 1 - start;
+    int endY = rows - 1 - start;
+
+    // 从左到右
+    for (int i = 0; i <= endX; i++)
+        printNumber(numbers[start][i]);
+    
+    // 从上到下
+    if (endY > start)
+        for (int i = start + 1; i <= endY; i++)
+            printNumber(numbers[i][endX]);
+
+    // 从右到左
+    if (endX > start && endY > start)
+        for (int i = endX - 1; i >= start; i--)
+            printNumber(numbers[endY][i]);
+        
+    // 从下到上
+    if (endX > start && endY - 1> start)
+        for (int i = endY - 1; i >= start + 1; i--)
+            printNumber(numbers[i][start]);
+}
+
+void PrintMatrixClockwisely(int** numbers, int columns, int rows) {
+    if (!numbers || columns <= 0 || rows <= 0)
+        return;
+ 
+    p29_ptr = 0;
+    int start = 0;
+    while (columns > start * 2 && rows > start * 2) {
+        PrintMatrixInCircle(numbers, columns, rows, start);
+        start++;
+    }
+    cout << endl;
+}

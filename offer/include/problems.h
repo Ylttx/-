@@ -52,6 +52,8 @@ struct BinaryTreeNode {
     BinaryTreeNode *m_pParent;
 
     BinaryTreeNode(int value): m_nValue(value), m_pLeft(nullptr), m_pRight(nullptr), m_pParent(nullptr) {}
+    BinaryTreeNode(int value, BinaryTreeNode* pLeft, BinaryTreeNode *pRight):
+        m_nValue(value), m_pLeft(pLeft), m_pRight(pRight), m_pParent(nullptr) {}
 };
 
 bool BinaryTreeEqual(BinaryTreeNode *bt1, BinaryTreeNode *bt2);
@@ -167,5 +169,28 @@ struct BinaryTreeNodeDouble {
 // 面试题26: 树的子结构
 bool HasSubtree(BinaryTreeNodeDouble* pRoot1, BinaryTreeNodeDouble* pRoot2);
 
+// 4.2 画图让抽象问题形象化
+// 面试题27: 二叉树的镜像
+void MirrorRecursively(BinaryTreeNode* pNode);
+
+// 面试题28: 对称的二叉树
+bool isSymmetrical(BinaryTreeNode* pRoot);
+
+// 面试题29: 顺时针打印矩阵
+extern int p29_numbers[20];
+void PrintMatrixClockwisely(int** numbers, int columns, int rows);
+
+// 4.3 举例让抽象问题具体化
+// 面试题30: 包含min函数的栈
+// 面试题31: 栈的压入、弹出序列
+// 面试题32: 从上到下打印二叉树
+// 面试题33: 二叉树搜索树的后序遍历序列
+// 面试题34: 二叉树中和为某一值的路径
+
+// 4.4 分解让复杂问题简单化
+// 面试题35: 复杂链表的复制
+// 面试题36: 二叉搜索树与双向链表
+// 面试题37: 序列话二叉树
+// 面试题38: 字符串的排列
 
 #endif

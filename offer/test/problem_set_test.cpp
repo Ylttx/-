@@ -549,3 +549,94 @@ TEST(P26_HasSubtree, WHEN_valid_DO_HasSubtree_THEN_true) {
  
     EXPECT_TRUE(HasSubtree(&bt1, &bt28));
 }
+
+TEST(P27_MirrorRecursively, WHEN_valid_DO_mirror_THEN_succ) {
+    BinaryTreeNode pNode5(5);
+    BinaryTreeNode pNode7(7);
+    BinaryTreeNode pNode9(9);
+    BinaryTreeNode pNode11(11);
+    BinaryTreeNode pNode6(6, &pNode5, &pNode7);
+    BinaryTreeNode pNode10(10, &pNode9, &pNode11);
+    BinaryTreeNode pNode8(8, &pNode6, &pNode10);
+
+    MirrorRecursively(&pNode8);
+
+    BinaryTreeNode* pLeft = pNode8.m_pLeft;
+    BinaryTreeNode* pRight = pNode8.m_pRight;
+    EXPECT_EQ(pLeft->m_nValue, 10);
+    EXPECT_EQ(pRight->m_nValue, 6);
+    EXPECT_EQ(pLeft->m_pLeft->m_nValue, 11);
+    EXPECT_EQ(pLeft->m_pRight->m_nValue, 9);
+    EXPECT_EQ(pRight->m_pLeft->m_nValue, 7);
+    EXPECT_EQ(pRight->m_pRight->m_nValue, 5);
+}
+
+TEST(P28_isSymmetrical, WHEN_valid_DO_isSymmetrical_THEN_true) {
+    BinaryTreeNode *pNode[6];
+    pNode[0] = new BinaryTreeNode(5);
+    pNode[1] = new BinaryTreeNode(7);
+    pNode[2] = new BinaryTreeNode(7);
+    pNode[3] = new BinaryTreeNode(5);
+    pNode[4] = new BinaryTreeNode(6, pNode[0], pNode[1]);
+    pNode[5] = new BinaryTreeNode(6, pNode[2], pNode[3]);
+    BinaryTreeNode pRoot(8, pNode[4], pNode[5]);
+
+    EXPECT_TRUE(isSymmetrical(&pRoot));
+
+    for (int i = 0; i < 6; i++) {
+        delete pNode[i];
+        pNode[i] = nullptr;
+    }
+}
+
+TEST(P28_isSymmetrical, WHEN_notSymmetrical_DO_isSymmetrical_THEN_false) {
+    BinaryTreeNode *pNode[6];
+    pNode[0] = new BinaryTreeNode(5);
+    pNode[1] = new BinaryTreeNode(7);
+    pNode[2] = new BinaryTreeNode(7);
+    pNode[3] = new BinaryTreeNode(5);
+    pNode[4] = new BinaryTreeNode(6, pNode[0], pNode[1]);
+    pNode[5] = new BinaryTreeNode(9, pNode[2], pNode[3]);
+    BinaryTreeNode pRoot(8, pNode[4], pNode[5]);
+
+    EXPECT_FALSE(isSymmetrical(&pRoot));
+ 
+    for (int i = 0; i < 6; i++)
+        pNode[i]->m_nValue = 7;
+    delete pNode[3];
+    pNode[3] = nullptr;
+
+    EXPECT_FALSE(isSymmetrical(&pRoot));
+
+    for (int i = 0; i < 6; i++) {
+        if (i == 3)
+            continue;
+
+        delete pNode[i];
+        pNode[i] = nullptr;
+    }
+}
+
+TEST(P29_PrintMatrixClockwisely, WHEN_valid_matrix_DO_Print_THEN_eq) {
+    int** numbers = new int*[3];
+    int k = 1;
+    for (int i = 0; i < 3; i++) {
+        numbers[i] = new int[2];
+        for (int j = 0; j < 2; j++) {
+            numbers[i][j] = k++;
+        }
+    }
+
+    int expect[] = {1, 2, 4, 6, 5, 3};
+    PrintMatrixClockwisely(numbers, 2, 3);
+    EXPECT_EQ(memcmp(expect, p29_numbers, sizeof(expect)), 0);
+
+    int expect22[] = {1, 2, 4, 3};
+    PrintMatrixClockwisely(numbers, 2, 2);
+    EXPECT_EQ(memcmp(expect22, p29_numbers, sizeof(expect22)), 0);
+
+    for (int i = 0; i < 3; i++) {
+        delete[] numbers[i];
+    }
+    delete[] numbers;
+}
