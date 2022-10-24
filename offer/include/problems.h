@@ -3,6 +3,7 @@
 
 #include <stack>
 #include <iostream>
+#include <vector>
 
 // 面试题1: 赋值运算符函数
 class CMyString {
@@ -182,10 +183,52 @@ void PrintMatrixClockwisely(int** numbers, int columns, int rows);
 
 // 4.3 举例让抽象问题具体化
 // 面试题30: 包含min函数的栈
+template<typename T>
+class StackWithMin {
+public:
+    void push(const T& value) {
+        m_data.push(value);
+ 
+        if (m_min.empty() || value <= m_min.top())
+            m_min.push(value);
+        else
+            m_min.push(m_min.top());
+    }
+
+    void pop() {
+        assert(!m_data.empty() && !m_min.empty());
+
+        m_data.pop();
+        m_min.pop();
+    }
+
+    const T& min() const {
+        assert(!m_data.empty() && !m_min.empty());
+
+        return m_min.top();
+    }
+
+private:
+    std::stack<T> m_data;
+    std::stack<T> m_min;
+};
+
 // 面试题31: 栈的压入、弹出序列
+bool IsPopOrder(const int* pPush, const int* pPop, int nLength);
+
 // 面试题32: 从上到下打印二叉树
+// 题目一：不分行从上到下打印二叉树
+extern int p32_numbers[20];
+void PrintFromTopToBottom(BinaryTreeNode* pTreeRoot);
+
+// 之字形打印二叉树
+void Print(BinaryTreeNode* pRoot);
+
 // 面试题33: 二叉树搜索树的后序遍历序列
+bool VerifySequenceOfBST(int sequence[], int length);
+
 // 面试题34: 二叉树中和为某一值的路径
+std::vector<std::vector<int>> FindPath(BinaryTreeNode* pRoot, int expectedSum);
 
 // 4.4 分解让复杂问题简单化
 // 面试题35: 复杂链表的复制

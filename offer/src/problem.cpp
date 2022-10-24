@@ -862,3 +862,150 @@ void PrintMatrixClockwisely(int** numbers, int columns, int rows) {
     }
     cout << endl;
 }
+
+bool IsPopOrder(const int* pPush, const int* pPop, int nLength) {
+    if (!pPush || !pPop || nLength <= 0)
+        return false;
+
+    int p1 = 0;
+    while (p1 < nLength && pPush[p1] != pPop[0])
+        p1++;
+    
+    if (p1 == nLength)
+        return false;
+    
+    int p2 = p1 + 1;
+    for (int i = 0; i < nLength; i++) {
+        if (p1 >= 0 && pPop[i] == pPush[p1])
+            p1--;
+        else if (p2 < nLength && pPop[i] == pPush[p2])
+            p2++;
+        else
+            return false;
+    }
+
+    return true;
+}
+
+// For test
+int p32_numbers[20] = {0};
+int p32_ptr = 0;
+
+static void printNumber32(int number) {
+    cout << number << " ";
+    p32_numbers[p32_ptr++] = number;
+}
+
+void PrintFromTopToBottom(BinaryTreeNode* pTreeRoot) {
+    p32_ptr = 0;
+    if (!pTreeRoot)
+        return;
+    
+    queue<BinaryTreeNode*> qTreeNode;
+    qTreeNode.push(pTreeRoot);
+
+    while (!qTreeNode.empty()) {
+        int size = (int) qTreeNode.size();
+        for (int i = 0; i < size; i++) {
+            auto pNode = qTreeNode.front();
+            qTreeNode.pop();
+
+            printNumber32(pNode->m_nValue);
+            if (pNode->m_pLeft)
+                qTreeNode.push(pNode->m_pLeft);
+            if (pNode->m_pRight)
+                qTreeNode.push(pNode->m_pRight);
+        }
+    }
+
+    cout << endl;
+}
+
+void Print(BinaryTreeNode* pRoot) {
+    p32_ptr = 0;
+    if (!pRoot)
+        return;
+    
+    stack<BinaryTreeNode*> level[2];
+    int current = 0;
+    int next = 1;
+
+    level[current].push(pRoot);
+    while (!level[0].empty() || !level[1].empty()) {
+        auto pNode = level[current].top();
+        level[current].pop();
+
+        printNumber32(pNode->m_nValue);
+
+        if (current == 0) {
+            if (pNode->m_pLeft) level[next].push(pNode->m_pLeft);
+            if (pNode->m_pRight) level[next].push(pNode->m_pRight);
+        } else {
+            if (pNode->m_pRight) level[next].push(pNode->m_pRight);
+            if (pNode->m_pLeft) level[next].push(pNode->m_pLeft);
+        }
+
+        if (level[current].empty()) {
+            current = 1 - current;
+            next = 1 - next;
+        }
+    }
+}
+
+bool VerifySequenceOfBST(int sequence[], int length) {
+    if (nullptr == sequence || length <= 0)
+        return false;
+ 
+    int root = sequence[length - 1];
+    int i = 0;
+    for (; i < length - 1; i++)
+        if (sequence[i] > root)
+            break;
+
+    int j = i;
+    for (; j < length - 1; j++)
+        if (sequence[j] < root)
+            return false;
+
+    bool left = true;
+    if (i > 0)
+        left = VerifySequenceOfBST(sequence, i);
+
+    bool right = true;
+    if (i < length - 1)
+        right = VerifySequenceOfBST(sequence + i, length - i - 1);
+
+    return (left && right);
+}
+
+static void FindPath(BinaryTreeNode* pRoot, int expectedSum, int currentSum, vector<int>& path, vector<vector<int>>& res) {
+    if (!pRoot)
+        return;
+    
+    currentSum += pRoot->m_nValue;
+    path.push_back(pRoot->m_nValue);
+    if (!pRoot->m_pLeft && !pRoot->m_pRight) {
+        if (expectedSum == currentSum) {
+            res.push_back(path);
+        }
+    }
+
+    if (pRoot->m_pLeft)
+        FindPath(pRoot->m_pLeft, expectedSum, currentSum, path, res);
+
+    if (pRoot->m_pRight)
+        FindPath(pRoot->m_pRight, expectedSum, currentSum, path, res);
+
+    path.pop_back();
+}
+
+std::vector<std::vector<int>> FindPath(BinaryTreeNode* pRoot, int expectedSum) {
+    std::vector<std::vector<int>> res;
+
+    if (pRoot) {
+        std::vector<int> path;
+        FindPath(pRoot, expectedSum, 0, path, res);
+    }
+    
+    return res;
+}

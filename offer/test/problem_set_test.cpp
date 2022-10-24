@@ -640,3 +640,100 @@ TEST(P29_PrintMatrixClockwisely, WHEN_valid_matrix_DO_Print_THEN_eq) {
     }
     delete[] numbers;
 }
+
+TEST(P30_StackWithMin, WHEN_valid_DO_op_THEN_eq) {
+    StackWithMin<int> swm;
+ 
+    swm.push(3);
+    EXPECT_EQ(swm.min(), 3);
+    swm.push(4);
+    EXPECT_EQ(swm.min(), 3);
+    swm.push(2);
+    EXPECT_EQ(swm.min(), 2);
+    swm.push(1);
+    EXPECT_EQ(swm.min(), 1);
+    swm.pop();
+    EXPECT_EQ(swm.min(), 2);
+    swm.pop();
+    EXPECT_EQ(swm.min(), 3);
+    swm.push(0);
+    EXPECT_EQ(swm.min(), 0);
+}
+
+TEST(P31_IsPopOrder, WHEN_is_DO_IsPopOrder_THEN_true) {
+    int push[] = {1,2,3,4,5};
+    int pop[] = {4,5,3,2,1};
+
+    EXPECT_TRUE(IsPopOrder(push, pop, 5));
+}
+
+TEST(P31_IsPopOrder, WHEN_isnot_DO_IsPopOrder_THEN_false) {
+    int push[] = {1,2,3,4,5};
+    int pop[] = {4,3,5,1,2};
+
+    EXPECT_FALSE(IsPopOrder(push, pop, 5));
+}
+
+TEST(P32_PrintFromTopToBottom, WHEN_bt_DO_print_THEN_eq) {
+    BinaryTreeNode *pNode[6];
+    pNode[0] = new BinaryTreeNode(5);
+    pNode[1] = new BinaryTreeNode(7);
+    pNode[2] = new BinaryTreeNode(9);
+    pNode[3] = new BinaryTreeNode(11);
+    pNode[4] = new BinaryTreeNode(6, pNode[0], pNode[1]);
+    pNode[5] = new BinaryTreeNode(10, pNode[2], pNode[3]);
+    BinaryTreeNode pRoot(8, pNode[4], pNode[5]);
+
+    PrintFromTopToBottom(&pRoot);
+    const int expect[] = {8,6,10,5,7,9,11};
+    EXPECT_EQ(memcmp(p32_numbers, expect, sizeof(expect)), 0);
+
+    for (int i = 0; i < 6; i++) {
+        delete pNode[i];
+        pNode[i] = nullptr;
+    }
+}
+
+TEST(P32_Print, WHEN_bt_DO_print_THEN_eq) {
+    BinaryTreeNode *pNode[16];
+    for (int i = 0; i < 16; i++)
+        pNode[i] = new BinaryTreeNode(i);
+ 
+    for (int i = 1; i <= 7; i++) {
+        pNode[i]->m_pLeft = pNode[i * 2];
+        pNode[i]->m_pRight= pNode[i * 2 + 1];
+    }
+
+    Print(pNode[1]);
+    const int expect[] = {1,3,2,4,5,6,7,15,14,13,12,11,10,9,8};
+    EXPECT_EQ(memcmp(p32_numbers, expect, sizeof(expect)), 0);
+
+    for (int i = 0; i < 16; i++) {
+        delete pNode[i];
+        pNode[i] = nullptr;
+    }
+}
+
+TEST(P33_VerifySequenceOfBST, WHEN_valid_bst_DO_verify_THEN_true) {
+    int input[] = {5,7,6,9,11,10,8};
+    EXPECT_TRUE(VerifySequenceOfBST(input, 7));
+}
+
+TEST(P33_VerifySequenceOfBST, WHEN_invalid_bst_DO_verify_THEN_false) {
+    int input[] = {7,4,6,5};
+    EXPECT_FALSE(VerifySequenceOfBST(input, 4));
+    EXPECT_FALSE(VerifySequenceOfBST(input, 0));
+    EXPECT_FALSE(VerifySequenceOfBST(nullptr, 4));
+}
+
+TEST(P34_FindPath, WHEN_two_valid_DO_find_THEN_eq) {
+    BinaryTreeNode pNode4(4);
+    BinaryTreeNode pNode7(7);
+    BinaryTreeNode pNode5(5, &pNode4, &pNode7);
+    BinaryTreeNode pNode12(12);
+    BinaryTreeNode pNode10(10, &pNode5, &pNode12);
+
+    std::vector<std::vector<int>> expect{{10, 5, 7}, {10, 12}};
+ 
+    EXPECT_EQ(FindPath(&pNode10, 22), expect);
+}
