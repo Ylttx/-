@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <vector>
+#include <sstream>
+#include <set>
 #include "problems.h"
 
 TEST(P1_CMyString, WHEN_helloworld_DO_assign_THEN_equal) {
@@ -736,4 +738,99 @@ TEST(P34_FindPath, WHEN_two_valid_DO_find_THEN_eq) {
     std::vector<std::vector<int>> expect{{10, 5, 7}, {10, 12}};
  
     EXPECT_EQ(FindPath(&pNode10, 22), expect);
+}
+
+TEST(P35_Clone, WHEN_valid_DO_clone_THEN_eq) {
+    ComplexListNode E('E', nullptr);
+    ComplexListNode D('D', &E);
+    ComplexListNode C('C', &D);
+    ComplexListNode B('B', &C);
+    ComplexListNode A('A', &B);
+
+    A.m_pSibling = &C;
+    B.m_pSibling = &E;
+    D.m_pSibling = &B;
+
+    ComplexListNode* pResult = Clone(&A);
+    EXPECT_NE(pResult, &A);
+
+    std::vector<std::vector<int>> expect;
+    ComplexListNode* pNode = pResult;
+    while (pNode != nullptr) {
+        std::vector<int> temp;
+        temp.push_back(pNode->m_nValue);
+
+        ComplexListNode* pNext = pNode->m_pNext;
+        if (pNext)
+            temp.push_back(pNext->m_nValue);
+        if (pNode->m_pSibling)
+            temp.push_back(pNode->m_pSibling->m_nValue);
+        
+        expect.push_back(temp);
+ 
+        pNode = pNext;
+    }
+    std::vector<std::vector<int>> vvi{{'A','B','C'}, {'B','C','E'}, {'C','D'}, {'D','E','B'}, {'E'}};
+    EXPECT_EQ(expect, vvi);
+
+    pNode = pResult;
+    while (pNode) {
+        ComplexListNode* pNext = pNode->m_pNext;
+        delete pNode;
+        pNode = pNext;
+    }
+}
+
+TEST(P36_Convert, WHEN_valid_DO_Convert_THEN_eq) {
+    BinaryTreeNode bt4(4);
+    BinaryTreeNode bt8(8);
+    BinaryTreeNode bt12(12);
+    BinaryTreeNode bt16(16);
+    BinaryTreeNode bt6(6, &bt4, &bt8);
+    BinaryTreeNode bt14(14, &bt12, &bt16);
+    BinaryTreeNode bt10(10, &bt6, &bt14);
+
+    BinaryTreeNode* pDoubleList = Convert(&bt10);
+
+    std::vector<int> vi;
+    BinaryTreeNode* pNode = pDoubleList;
+    bool right = true;
+    do {
+        vi.push_back(pNode->m_nValue);
+        if (right && pNode->m_pRight)
+            pNode = pNode->m_pRight;
+        else {
+            right = false;
+            pNode = pNode->m_pLeft;
+        }
+    } while (pNode && pNode != pDoubleList);
+    vi.push_back(pNode->m_nValue);
+
+    std::vector<int> expect{4,6,8,10,12,14,16,14,12,10,8,6,4};
+
+    EXPECT_EQ(vi, expect);
+}
+
+TEST(P37_Serialize, WHEN_valid_DO_Serialize_THEN_eq) {
+    BinaryTreeNode bt4(4);
+    BinaryTreeNode bt5(5);
+    BinaryTreeNode bt6(6);
+    BinaryTreeNode bt2(2, &bt4, nullptr);
+    BinaryTreeNode bt3(3, &bt5, &bt6);
+    BinaryTreeNode bt1(1, &bt2, &bt3);
+
+    std::ostringstream oss;
+    Serialize(&bt1, oss);
+ 
+    EXPECT_EQ(oss.str(), "1,2,4,$,$,$,3,5,$,$,6,$,$,");
+}
+
+TEST(P38_Permutation, WHEN_abc_DO_Permutation_THEN_eq) {
+    std::set<std::string> result;
+    char cs[] = "abc";
+
+    Permutation(cs, result);
+
+    std::set<std::string> expect{"abc", "acb", "bac", "bca", "cab", "cba"};
+    EXPECT_EQ(result, expect);
 }

@@ -1009,3 +1009,166 @@ std::vector<std::vector<int>> FindPath(BinaryTreeNode* pRoot, int expectedSum) {
     
     return res;
 }
+
+static void CloneNodes(ComplexListNode* pHead) {
+    ComplexListNode* pNode = pHead;
+
+    while (pNode) {
+        ComplexListNode* pClone = new ComplexListNode(pNode->m_nValue, pNode->m_pNext);
+        pNode->m_pNext = pClone;
+        pNode = pClone->m_pNext;
+    }
+}
+
+static void ConnectSiblingNodes(ComplexListNode* pHead) {
+    ComplexListNode* pNode = pHead;
+
+    while (pNode) {
+        ComplexListNode* pClone = pNode->m_pNext;
+        if (pNode->m_pSibling)
+            pClone->m_pSibling = pNode->m_pSibling->m_pNext;
+        pNode = pClone->m_pNext; 
+    }
+}
+
+static ComplexListNode* ReconnectNodes(ComplexListNode* pHead) {
+    ComplexListNode* pCloneHead, *pCloneNode;
+    ComplexListNode* pNode = pHead;
+
+    pCloneHead = pCloneNode = pNode->m_pNext;
+    pNode->m_pNext = pCloneNode->m_pNext;
+    pNode = pNode->m_pNext;
+
+    while (pNode) {
+        pCloneNode->m_pNext = pNode->m_pNext;
+        pCloneNode = pCloneNode->m_pNext;
+        pNode->m_pNext = pCloneNode->m_pNext;
+        pNode = pNode->m_pNext;
+    }
+
+    return pCloneHead;
+}
+
+ComplexListNode* Clone(ComplexListNode* pHead) {
+    if (!pHead)
+        return nullptr;
+ 
+    CloneNodes(pHead);
+    ConnectSiblingNodes(pHead);
+    return ReconnectNodes(pHead);
+}
+
+#if 0
+static void dfs(BinaryTreeNode* pRoot, vector<BinaryTreeNode*>& vbt) {
+    if (!pRoot)
+        return;
+    
+    vbt.push_back(pRoot);
+    dfs(pRoot->m_pLeft, vbt);
+    dfs(pRoot->m_pRight, vbt);
+}
+
+BinaryTreeNode* Convert(BinaryTreeNode* pRoot) {
+    vector<BinaryTreeNode*> vbt;
+
+    dfs(pRoot, vbt);
+
+    std::sort(vbt.begin(), vbt.end(), [](BinaryTreeNode* x, BinaryTreeNode* y) {
+        return x->m_nValue <= y->m_nValue;
+    });
+
+    for (int i = 0; i < vbt.size(); i++) {
+        if (i == 0)
+            vbt[i]->m_pRight = vbt[i + 1];
+        else if (i == vbt.size() - 1)
+            vbt[i]->m_pLeft = vbt[i - 1];
+        else if (i > 0 && i < vbt.size() - 1) {
+            vbt[i]->m_pRight = vbt[i + 1];
+            vbt[i]->m_pLeft = vbt[i - 1];
+        }
+    }
+
+    return vbt[0];
+}
+#else
+static void ConvertNode(BinaryTreeNode* pNode, BinaryTreeNode** pLastNodeInList){
+    if (!pNode)
+        return;
+    
+    BinaryTreeNode* pCurrent = pNode;
+    if (pCurrent->m_pLeft)
+        ConvertNode(pCurrent->m_pLeft, pLastNodeInList);
+    
+    pCurrent->m_pLeft = *pLastNodeInList;
+    if (*pLastNodeInList)
+        (*pLastNodeInList)->m_pRight = pCurrent;
+
+    *pLastNodeInList = pCurrent;
+
+    if (pCurrent->m_pRight)
+        ConvertNode(pCurrent->m_pRight, pLastNodeInList);
+}
+
+BinaryTreeNode* Convert(BinaryTreeNode* pRoot) {
+    BinaryTreeNode* pLastNodeInList = nullptr;
+    ConvertNode(pRoot, &pLastNodeInList);
+
+    BinaryTreeNode* pHeadOfList = pLastNodeInList;
+    while (pHeadOfList && pHeadOfList->m_pLeft)
+        pHeadOfList = pHeadOfList->m_pLeft;
+
+    return pHeadOfList;
+}
+#endif
+
+void Serialize(BinaryTreeNode* pRoot, std::ostream& stream) {
+    if (!pRoot) {
+        stream << "$,";
+        return;
+    }
+ 
+    stream << pRoot->m_nValue << ",";
+    Serialize(pRoot->m_pLeft, stream);
+    Serialize(pRoot->m_pRight, stream);
+}
+
+static bool ReadStream(std::istream& stream, int& number) {
+    stream >> number;
+    return true;
+}
+
+void Deserialize(BinaryTreeNode** pRoot, std::istream& stream) {
+    int number;
+    if (ReadStream(stream, number)) {
+        *pRoot = new BinaryTreeNode(number);
+ 
+        Deserialize(&((*pRoot)->m_pLeft), stream);
+        Deserialize(&((*pRoot)->m_pRight), stream);
+    }
+}
+
+static void Permutation(char* pStr, char* pBegin, std::set<std::string>& result) {
+    if (*pBegin == '\0') {
+        result.insert(std::string(pStr, pBegin - pStr));
+        return;
+    }
+
+    for (char* pCh = pBegin; *pCh != '\0'; ++pCh) {
+        char temp = *pCh;
+        *pCh = *pBegin;
+        *pBegin = temp;
+
+        Permutation(pStr, pBegin + 1, result);
+
+        temp = *pCh;
+        *pCh = *pBegin;
+        *pBegin = temp;
+    }
+}
+
+void Permutation(char* pStr, std::set<std::string>& result) {
+    if (!pStr)
+        return;
+    
+    Permutation(pStr, pStr, result);
+}

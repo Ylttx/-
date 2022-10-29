@@ -4,6 +4,7 @@
 #include <stack>
 #include <iostream>
 #include <vector>
+#include <set>
 
 // 面试题1: 赋值运算符函数
 class CMyString {
@@ -232,8 +233,26 @@ std::vector<std::vector<int>> FindPath(BinaryTreeNode* pRoot, int expectedSum);
 
 // 4.4 分解让复杂问题简单化
 // 面试题35: 复杂链表的复制
+struct ComplexListNode {
+    int m_nValue;
+    ComplexListNode* m_pNext;
+    ComplexListNode* m_pSibling;
+ 
+    ComplexListNode() {}
+    ComplexListNode(int value, ComplexListNode* pNext) :
+        m_nValue(value), m_pNext(pNext), m_pSibling(nullptr) {}
+};
+
+ComplexListNode* Clone(ComplexListNode* pHead);
+
 // 面试题36: 二叉搜索树与双向链表
-// 面试题37: 序列话二叉树
+BinaryTreeNode* Convert(BinaryTreeNode* pRoot);
+
+// 面试题37: 序列化二叉树
+void Serialize(BinaryTreeNode* pRoot, std::ostream& stream);
+void Deserialize(BinaryTreeNode** pRoot, std::istream& stream);
+
 // 面试题38: 字符串的排列
+void Permutation(char* pStr, std::set<std::string>& result);
 
 #endif
