@@ -834,3 +834,114 @@ TEST(P38_Permutation, WHEN_abc_DO_Permutation_THEN_eq) {
     std::set<std::string> expect{"abc", "acb", "bac", "bca", "cab", "cba"};
     EXPECT_EQ(result, expect);
 }
+
+TEST(P39_MoreThanHalfNum, WHEN_valid_DO_MoreThanHalfNum_THEN_eq2) {
+    int numbers[] = {1,2,3,2,2,2,5,4,2};
+
+    EXPECT_EQ(MoreThanHalfNum(numbers, 9), 2);
+}
+
+TEST(P39_MoreThanHalfNum, WHEN_valid_DO_MoreThanHalfNum2_THEN_eq2) {
+    int numbers[] = {1,2,3,2,2,2,5,4,2};
+
+    EXPECT_EQ(MoreThanHalfNum2(numbers, 9), 2);
+}
+
+TEST(P40_GetLeastNumbers, WHEN_valid_DO_GetLeastNumbers_THEN_eq) {
+    int input[] = {4,5,1,6,2,7,3,8};
+    int output[4] = {0};
+    int expect[4] = {1,2,3,4};
+
+    GetLeastNumbers(input, 8, output, 4);
+
+    EXPECT_EQ(memcmp(output, expect, sizeof(output)), 0);
+}
+
+TEST(P40_GetLeastNumbers, WHEN_valid_DO_GetLeastNumbersQueue_THEN_eq) {
+    std::vector<int> data{4,5,1,6,2,7,3,8};
+    PQInt out;
+    std::vector<int> outdata;
+    std::vector<int> expect{4,3,2,1};
+
+    GetLeastNumbers(data, out, 4);
+    while (!out.empty()) {
+        outdata.push_back(out.top());
+        out.pop();
+    }
+ 
+    EXPECT_EQ(outdata, expect);
+}
+
+TEST(P41_DynamicArray, WHEN_valid_DO_DynamicArray_THEN_eq) {
+    DynamicArray<int> da;
+
+    da.Insert(2);
+    da.Insert(5);
+    da.Insert(8);
+    da.Insert(3);
+    da.Insert(1);
+
+    EXPECT_EQ(da.GetMedian(), 3);
+
+    da.Insert(6);
+    EXPECT_EQ(da.GetMedian(), 4);
+}
+
+TEST(P42_FindGreatestSumOfSubArrays, WHEN_valid_DO_find_THEN_eq) {
+    int data[] = {1,-2,3,10,-4,7,2,-5};
+    int iLength = (int) (sizeof(data) / sizeof(int));
+
+    EXPECT_EQ(FindGreatestSumOfSubArrays(data, iLength), 18);
+    EXPECT_FALSE(g_bInvalidInput);
+}
+
+TEST(P42_FindGreatestSumOfSubArrays, WHEN_invalid_DO_find_THEN_invalid) {
+    FindGreatestSumOfSubArrays(nullptr, 0);
+ 
+    EXPECT_TRUE(g_bInvalidInput);
+}
+
+TEST(P43_NumberOf1Between1AndN, WHEN_valid_DO_get_num_THEN_eq) {
+    EXPECT_EQ(NumberOf1Between1AndN(12), 5);
+}
+
+TEST(P44_DigitAtIndex, WHEN_valid_DO_get_digit_THEN_eq) {
+    EXPECT_EQ(DigitAtIndex(5), 5);
+    EXPECT_EQ(DigitAtIndex(13), 1);
+    EXPECT_EQ(DigitAtIndex(19), 4);
+    EXPECT_EQ(DigitAtIndex(1001), 7);
+}
+
+TEST(P45_PrintMinNumber, WHEN_PrintMinNumber_DO_print_THEN_eq) {
+    int numbers[] = {3, 32, 321};
+    
+    EXPECT_EQ(strcmp(PrintMinNumber(numbers, 3), "321323"), 0);
+}
+
+TEST(P46_GetTranslationCount, WHEN_valid_DO_GetTranslationCount_THEN_eq) {
+    EXPECT_EQ(GetTranslationCount(12258), 5);
+    EXPECT_EQ(GetTranslationCount(9), 1);
+}
+
+TEST(P46_GetTranslationCount, WHEN_special_DO_GetTranslationCount_THEN_eq) {
+    EXPECT_EQ(GetTranslationCount(0), 1);
+    EXPECT_EQ(GetTranslationCount(-1), 0);
+    EXPECT_EQ(GetTranslationCount(25), 2);
+    EXPECT_EQ(GetTranslationCount(26), 1);
+}
+
+TEST(P47_GetMaxValue, WHEN_valid_DO_GetMaxValue_THEN_eq) {
+    int values[] = {
+        1,10,3,8,
+        12,2,9,6,
+        5,7,4,11,
+        3,7,16,5
+    };
+ 
+    EXPECT_EQ(GetMaxValueS1(values, 4, 4), 53);
+    EXPECT_EQ(GetMaxValueS2(values, 4, 4), 53);
+}
+
+TEST(P48_LongestSubstringNoRepeat, WHEN_arabcacfr_DO_Get_THEN_eq) {
+    EXPECT_EQ(LongestSubstringNoRepeat("arabcacfr"), 4);
+}

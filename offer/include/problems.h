@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <queue>
 
 // 面试题1: 赋值运算符函数
 class CMyString {
@@ -254,5 +255,92 @@ void Deserialize(BinaryTreeNode** pRoot, std::istream& stream);
 
 // 面试题38: 字符串的排列
 void Permutation(char* pStr, std::set<std::string>& result);
+
+// 第5章 优化时间和空间效率
+// 5.2 时间效率
+// 面试题39: 数组中出现次数超过一半的数字
+int MoreThanHalfNum(int* numbers, int length);
+int MoreThanHalfNum2(int* numbers, int length);
+
+// 面试题40: 最小的k个数
+void GetLeastNumbers(int* input, int n, int* output, int k);
+typedef std::priority_queue<int, std::vector<int>> PQInt;
+void GetLeastNumbers(const std::vector<int>& data, PQInt& out, int k);
+
+// 面试题41: 数据流中的中位数
+template<typename T>
+class DynamicArray {
+public:
+    void Insert(T num) {
+        if (((min.size() + max.size()) & 1) == 0) {
+            if (max.size() > 0 && max[0] > num) {
+                max.push_back(num);
+                push_heap(max.begin(), max.end(), std::less<T>());
+
+                num = max[0];
+
+                pop_heap(max.begin(), max.end(), std::less<T>());
+                max.pop_back();
+            }
+
+            min.push_back(num);
+            push_heap(min.begin(), min.end(), std::greater<T>());
+        } else {
+            if (min.size() > 0 && min[0] < num) {
+                min.push_back(num);
+                push_heap(min.begin(), min.end(), std::greater<T>());
+
+                num = min[0];
+
+                pop_heap(min.begin(), min.end(), std::greater<T>());
+                min.pop_back();
+            }
+
+            max.push_back(num);
+            push_heap(max.begin(), max.end(), std::less<T>());
+        }
+    }
+
+    T GetMedian(void) {
+        int size = min.size() + max.size();
+        if (size == 0)
+            throw "No numbers are available";
+        
+        return (size & 1) ? min[0] : (min[0] + max[0]) / 2;
+    }
+
+private:
+    std::vector<T> min;
+    std::vector<T> max;
+};
+
+// 面试题42: 连续子数组的最大和
+extern bool g_bInvalidInput;
+int FindGreatestSumOfSubArrays(int* pData, int iLength);
+
+// 面试题43: 1～n整数中1出现的次数
+int NumberOf1Between1AndN(int n);
+
+// 面试题44: 数字序列中某一位的数字
+int DigitAtIndex(int index);
+
+// 面试题45: 把数组排成最小的数
+const char* PrintMinNumber(int* numbers, int length);
+
+// 面试题46: 把数字翻译成字符串
+int GetTranslationCount(int number);
+
+// 面试题47: 礼物的最大价值
+int GetMaxValueS1(const int* values, int rows, int cols);
+int GetMaxValueS2(const int* values, int rows, int cols);
+
+// 面试题48: 最长不含重复字符的子字符串
+int LongestSubstringNoRepeat(const std::string& str);
+
+// 5.3 时间效率与空间效率第平衡
+// 面试题49: 丑数
+// 面试题50: 第一个只出现一次的字符
+// 面试题51: 数组中的逆序对
+// 面试题52: 两个链表的第一个公共节点
 
 #endif

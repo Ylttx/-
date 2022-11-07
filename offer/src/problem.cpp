@@ -1172,3 +1172,342 @@ void Permutation(char* pStr, std::set<std::string>& result) {
     
     Permutation(pStr, pStr, result);
 }
+
+static void Swap(int* x, int* y) {
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+static int Partition(int* numbers, int start, int end) {
+    int small = start -1;
+    for (int i = start; i < end; i++) {
+        if (numbers[i] < numbers[end]) {
+            ++small;
+            if (small != i) {
+                Swap(&numbers[i], &numbers[small]);
+            }
+        }
+    }
+
+    ++small;
+    Swap(&numbers[small], &numbers[end]);
+    return small;
+}
+
+static bool CheckMoreThanHalf(int* numbers, int length, int value) {
+    const int half = length >> 1;
+    int times = 0;
+
+    while (--length >= 0)
+        times += (numbers[length] == value);
+
+    return times > half;
+}
+
+int MoreThanHalfNum(int* numbers, int length) {
+    if (!numbers || length <= 0)
+        return 0;
+
+    int middle = length >> 1;
+    int start = 0;
+    int end = length - 1;
+    int index = Partition(numbers, start, end);
+    while (index != middle) {
+        if (index > middle) {
+            end = index - 1;
+        } else {
+            start = index + 1;
+        }
+ 
+        index = Partition(numbers, start, end);
+    }
+
+    int result = numbers[index];
+    return CheckMoreThanHalf(numbers, length, result) ? result : 0;
+}
+
+int MoreThanHalfNum2(int* numbers, int length) {
+    if (!numbers || length <= 0)
+        return 0;
+    
+    int times = 1;
+    int value = numbers[0];
+    for (int i = 1; i < length; i++) {
+        if (times == 0) {
+            times = 1;
+            value = numbers[i];
+        } else{
+            times += (numbers[i] == value ? 1 : -1);
+        }
+    }
+
+    return CheckMoreThanHalf(numbers, length, value) ? value : 0;
+}
+
+void GetLeastNumbers(int* input, int n, int* output, int k) {
+    if (!input || n <= 0 || !output || n < k || k <= 0)
+        return;
+    
+    int start = 0, end = n - 1, index = 0;
+ 
+    do {
+        index = Partition(input, start, end);
+        if (index > k)
+            end = index - 1;
+        else
+            start = index + 1;
+   } while (index != k);
+
+    std::copy(input, input + index, output);
+}
+
+void GetLeastNumbers(const std::vector<int>& data, PQInt& out, int k) {
+    if (k < 1 || (int) data.size() < k)
+        return;
+    
+    for (const auto& x : data) {
+        if ((int) out.size() < k) {
+            out.push(x);
+        } else if (x < out.top()) {
+            out.pop();
+            out.push(x);
+        }
+    }
+}
+
+bool g_bInvalidInput = false;
+int FindGreatestSumOfSubArrays(int* pData, int iLength) {
+    if (!pData || iLength <= 0) {
+        g_bInvalidInput = true;
+        return 0;
+    }
+
+    g_bInvalidInput = false;
+    int iGreatest = 0x80000000;
+    int iSum = 0;
+
+    for (int i = 0; i < iLength; i++) {
+        if (iSum < 0) {
+            iSum = pData[i];
+        } else {
+            iSum += pData[i];
+        }
+
+        iGreatest = std::max(iGreatest, iSum);
+    }
+
+    return iGreatest;
+}
+
+static int NumberOf1(const char* strN) {
+    if (!strN || *strN < '0' || *strN > '9' || *strN == '\0')
+        return 0;
+    
+    int first = *strN - '0';
+    unsigned int length = static_cast<unsigned int>(strlen(strN));
+
+    if (length == 1 && first == 0)
+        return 0;
+    
+    if (length == 1 && first > 0)
+        return 1;
+
+    int numFirstDigit = (first > 1) ? std::pow(10, length - 1) : atoi(strN + 1) + 1;
+    int numOtherDigits = first * (length - 1) * std::pow(10, length - 2);
+    int numRecursive = NumberOf1(strN + 1);
+
+    return numFirstDigit + numOtherDigits + numRecursive;
+}
+
+int NumberOf1Between1AndN(int n) {
+    if (n <= 0)
+        return 0;
+    
+    char strN[50];
+    sprintf(strN, "%d", n);
+
+    return NumberOf1(strN);
+}
+
+static int CountOfIntegers(int digits) {
+    if (digits == 1)
+        return 10;
+    
+    return 9 * std::pow(10, digits - 1);
+}
+
+static int BeginNumber(int digits) {
+    if (digits == 1)
+        return 0;
+    
+    return std::pow(10, digits - 1);
+}
+
+static int DigitAtIndex(int index, int digits) {
+    int number = BeginNumber(digits) + index / digits;
+    int indexFromRight = digits - index % digits;
+    for (int i = 1; i < indexFromRight; i++)
+        number /= 10;
+    return number % 10;
+}
+
+int DigitAtIndex(int index) {
+    if (index < 0)
+        return 0;
+
+    int digits = 1;
+    while (true) {
+        int numbers = CountOfIntegers(digits);
+        if (index < digits * numbers)
+            return DigitAtIndex(index, digits);
+        
+        index -= digits * numbers;
+        ++digits;
+    }
+ 
+    return -1;
+}
+
+const int ciMaxLength = 10;
+
+static int compare(const void* p1, const void* p2) {
+    static char strCombine1[ciMaxLength * 2 + 1];
+    static char strCombine2[ciMaxLength * 2 + 1];
+
+    strcpy(strCombine1, *(const char**)p1);
+    strcat(strCombine1, *(const char**)p2);
+
+    strcpy(strCombine2, *(const char**)p2);
+    strcat(strCombine2, *(const char**)p1);
+
+    return strcmp(strCombine1, strCombine2);
+}
+
+const char* PrintMinNumber(int* numbers, int length) {
+    static char strMinNumber[100];
+
+    if (!numbers || length <= 0)
+        return nullptr;
+
+    bzero(strMinNumber, sizeof(strMinNumber));
+    char** strNumbers = new char*[length];
+    int iDigitLength = 0;
+    for (int i = 0; i < length; i++) {
+        strNumbers[i] = new char[ciMaxLength + 1];
+        iDigitLength += sprintf(strNumbers[i], "%d", numbers[i]);
+    }
+
+    qsort(strNumbers, length, sizeof(char*), compare);
+    strcpy(strMinNumber, strNumbers[0]);
+    for (int i = 1; i < length; i++) {
+        strcat(strMinNumber, strNumbers[i]);
+    }
+ 
+    for (int i = 0; i < length; i++)
+        delete[] strNumbers[i];
+    delete[] strNumbers;
+
+    return strMinNumber;
+}
+
+static int GetTranslationCount(const std::string& number) {
+    int length = (int) number.length();
+    int* counts = new int[length];
+    int count = 0;
+
+    for (int i = length - 1; i >= 0; --i) {
+        count = (i < length - 1) ? counts[i + 1] : 1;
+
+        if (i < length - 1) {
+            int converted = (number[i] - '0') * 10 + number[i + 1] - '0';
+            if (converted >= 10 && converted <= 25)
+                count += ((i < length - 2) ? counts[i + 2] : 1);
+        }
+
+        counts[i] = count;
+    }
+
+    count = counts[0];
+    delete[] counts;
+
+    return count;
+}
+
+int GetTranslationCount(int number) {
+    if (number < 0)
+        return 0;
+    
+    return GetTranslationCount(std::to_string(number));
+}
+
+int GetMaxValueS1(const int* values, int rows, int cols) {
+    if (!values || rows <= 0 || cols <= 0)
+        return 0;
+ 
+    int** maxValues = new int*[rows + 1];
+    for (int i = 0; i < rows + 1; ++i) {
+        maxValues[i] = new int[cols + 1];
+        bzero(maxValues[i], sizeof(int) * (cols + 1));
+    }
+ 
+    for (int i = 1; i <= rows; ++i) {
+        for (int j = 1; j <= cols; ++j) {
+            int gift = values[(i - 1) * cols + j - 1];
+            maxValues[i][j] = std::max(maxValues[i - 1][j], maxValues[i][j - 1]) + gift;
+        }
+    }
+ 
+    int maxValue = maxValues[rows][cols];
+    for (int i = 0; i < rows + 1; ++i)
+        delete[] maxValues[i];
+    delete[] maxValues;
+
+    return maxValue;
+}
+
+int GetMaxValueS2(const int* values, int rows, int cols) {
+    if (!values || rows <= 0 || cols <= 0)
+        return 0;
+ 
+    int* maxValues = new int[cols + 1];
+    bzero(maxValues, sizeof(int) * (cols + 1));
+ 
+    for (int i = 1; i <= rows; ++i) {
+        for (int j = 1; j <= cols; ++j) {
+            int gift = values[(i - 1) * cols + j - 1];
+            maxValues[j] = std::max(maxValues[j], maxValues[j - 1]) + gift;
+        }
+    }
+
+    int maxValue = maxValues[cols];
+    delete[] maxValues;
+ 
+    return maxValue;
+}
+
+int LongestSubstringNoRepeat(const std::string& str) {
+    int length = (int) str.length();
+    if (length <= 0)
+        return 0;
+
+    int position[26];
+    for (int i = 0; i < 26; ++i)
+        position[i] = -1;
+    
+    int curLength = 0, maxLength = 0;
+    for (int i = 0; i < length; ++i) {
+        int prev = position[str[i] - 'a'];
+ 
+        if (prev < 0 || i - prev > curLength)
+            ++curLength;
+        else {
+            maxLength = std::max(curLength, maxLength);
+            curLength = i - prev;
+        }
+
+        position[str[i] - 'a'] = i;
+    }
+
+    return std::max(curLength, maxLength);
+}
