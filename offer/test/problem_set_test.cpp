@@ -945,3 +945,67 @@ TEST(P47_GetMaxValue, WHEN_valid_DO_GetMaxValue_THEN_eq) {
 TEST(P48_LongestSubstringNoRepeat, WHEN_arabcacfr_DO_Get_THEN_eq) {
     EXPECT_EQ(LongestSubstringNoRepeat("arabcacfr"), 4);
 }
+
+TEST(P49_GetUglyNumber, WHEN_valid_DO_GetUglyNumber_THEN_eq) {
+    EXPECT_EQ(GetUglyNumberS1(1), 1);
+    EXPECT_EQ(GetUglyNumberS1(2), 2);
+    EXPECT_EQ(GetUglyNumberS1(3), 3);
+    EXPECT_EQ(GetUglyNumberS1(4), 4);
+    EXPECT_EQ(GetUglyNumberS1(5), 5);
+    EXPECT_EQ(GetUglyNumberS1(6), 6);
+    // EXPECT_EQ(GetUglyNumberS1(1500), 859963392); 耗时30s Macbook pro 13' 2018 early
+}
+
+TEST(P49_GetUglyNumberS2, WHEN_valid_DO_GetUglyNumber_THEN_eq) {
+    EXPECT_EQ(GetUglyNumberS2(1), 1);
+    EXPECT_EQ(GetUglyNumberS2(2), 2);
+    EXPECT_EQ(GetUglyNumberS2(3), 3);
+    EXPECT_EQ(GetUglyNumberS2(4), 4);
+    EXPECT_EQ(GetUglyNumberS2(5), 5);
+    EXPECT_EQ(GetUglyNumberS2(6), 6);
+    EXPECT_EQ(GetUglyNumberS2(1500), 859963392);
+}
+
+TEST(P49_GetUglyNumber, WHEN_invalid_DO_GetUglyNumber_THEN_eq) {
+    EXPECT_EQ(GetUglyNumberS1(0), 0);
+    EXPECT_EQ(GetUglyNumberS1(-102), 0);
+
+    EXPECT_EQ(GetUglyNumberS2(0), 0);
+    EXPECT_EQ(GetUglyNumberS2(-102), 0);
+}
+
+TEST(P50_FirstNotRepeatingChar, WHEN_valid_DO_Find_THEN_eq) {
+    EXPECT_EQ(FirstNotRepeatingChar("abaccdeff"), 'b');
+}
+
+TEST(P50_CharStatistics, WHEN_valid_DO_Find_THEN_eq) {
+    CharStatistics cs;
+    cs.Insert('a');
+    cs.Insert('b');
+    cs.Insert('a');
+    cs.Insert('c');
+    cs.Insert('c');
+    cs.Insert('d');
+    cs.Insert('e');
+    cs.Insert('f');
+    cs.Insert('f');
+
+    EXPECT_EQ(cs.FirstAppearingOnce(), 'b');
+}
+
+TEST(P51_InversePairs, WHEN_valid_DO_Inverse_THEN_eq) {
+    int data[] = {7,5,6,4};
+    EXPECT_EQ(InversePairs(data, 4), 5);
+}
+
+TEST(P52_FindFirstCommonNode, WHEN_valid_DO_Find_THEN_eq) {
+    ListNode ln7(7, nullptr);
+    ListNode ln6(6, &ln7);
+    ListNode ln5(5, &ln6);
+    ListNode ln4(4, &ln5);
+    ListNode ln3(3, &ln6);
+    ListNode ln2(2, &ln3);
+    ListNode ln1(1, &ln2);
+
+    EXPECT_EQ(FindFirstCommonNode(&ln1, &ln4), &ln6);
+}

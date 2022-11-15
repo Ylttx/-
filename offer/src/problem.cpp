@@ -1511,3 +1511,124 @@ int LongestSubstringNoRepeat(const std::string& str) {
 
     return std::max(curLength, maxLength);
 }
+
+static bool IsUgly(int number) {
+    while (number % 2 == 0) number /= 2;
+    while (number % 3 == 0) number /= 3;
+    while (number % 5 == 0) number /= 5;
+    return number == 1;
+}
+
+int GetUglyNumberS1(int index) {
+    if (index <= 0)
+        return 0;
+    
+    int count = 0;
+    int number = 0;
+    while (count < index) {
+        ++number;
+        if (IsUgly(number))
+            ++count;
+    }
+ 
+    return number;
+}
+
+int GetUglyNumberS2(int index) {
+    if (index <= 0)
+        return 0;
+
+    int* uglys = new int[index];
+    uglys[0] = 1;
+    int next = 1;
+ 
+    int* muil2 = uglys;
+    int* muil3 = uglys;
+    int* muil5 = uglys;
+
+    while (next < index) {
+        uglys[next] = std::min(std::min(*muil2 * 2, *muil3 * 3), *muil5 * 5);
+
+        while (*muil2 * 2 <= uglys[next]) ++muil2;
+        while (*muil3 * 3 <= uglys[next]) ++muil3;
+        while (*muil5 * 5 <= uglys[next]) ++muil5;
+
+        ++next;
+    }
+
+    int ugly = uglys[index - 1];
+    delete[] uglys;
+    return ugly;
+}
+
+char FirstNotRepeatingChar(const char* pString) {
+    if (!pString)
+        return '\0';
+
+    int counts[256] = {0};
+    for (const char* pCur = pString; *pCur != '\0'; ++pCur)
+        ++counts[(unsigned char) *pCur];
+    
+    for (const char* pCur = pString; *pCur != '\0'; ++pCur)
+        if (counts[(unsigned char) *pCur] == 1)
+            return *pCur;
+ 
+    return '\0';
+}
+
+static int InversePairsCore(int* data, int* copy, int start, int end) {
+    if (start == end) {
+        copy[start] = data[start];
+        return 0;
+    }
+
+    int length = (end - start) / 2;
+    int left = InversePairsCore(copy, data, start, start + length);
+    int right = InversePairsCore(copy, data, start + length + 1, end);
+
+    int i = start + length;
+    int j = end;
+    int indexCopy = end;
+    int count = 0;
+    while (i >= start && j >= start + length + 1) {
+        if (data[i] > data[j]) {
+            copy[indexCopy--] = data[i--];
+            count += j - start - length;
+        } else {
+            copy[indexCopy--] = data[j--];
+        }
+    }
+
+    for (; i >= start; --i)
+        copy[indexCopy--] = data[i];
+
+    for (; j >= start + length + 1; --j)
+        copy[indexCopy--] = data[j];
+    
+    return left + right + count;
+}
+
+int InversePairs(int* data, int length) {
+    if (!data || length < 0)
+        return 0;
+ 
+    int copy[length];
+    std::copy(data, data + length, copy);
+
+    return InversePairsCore(data, copy, 0, length - 1);
+}
+
+ListNode* FindFirstCommonNode(ListNode* pHead1, ListNode* pHead2) {
+    if (!pHead1 || !pHead2)
+        return nullptr;
+    
+    ListNode* pNode1 = pHead1;
+    ListNode* pNode2 = pHead2;
+
+    while (pNode1->m_pNext != pNode2->m_pNext) {
+        pNode1 = pNode1->m_pNext != nullptr ? pNode1->m_pNext : pHead2;
+        pNode2 = pNode2->m_pNext != nullptr ? pNode2->m_pNext : pHead1;
+    }
+
+    return pNode1->m_pNext;
+}

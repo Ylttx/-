@@ -6,6 +6,7 @@
 #include <vector>
 #include <set>
 #include <queue>
+#include <limits>
 
 // 面试题1: 赋值运算符函数
 class CMyString {
@@ -37,6 +38,9 @@ void ReplaceBlank(char string[], int length);
 
 // 面试题6: 从尾到头打印链表
 struct ListNode {
+    ListNode() : m_nKey(0), m_pNext(nullptr) {}
+    ListNode(int key, ListNode* next) : m_nKey(key), m_pNext(next) {}
+ 
     int m_nKey;
     ListNode *m_pNext;
 };
@@ -339,8 +343,53 @@ int LongestSubstringNoRepeat(const std::string& str);
 
 // 5.3 时间效率与空间效率第平衡
 // 面试题49: 丑数
+int GetUglyNumberS1(int index);
+int GetUglyNumberS2(int index);
+
 // 面试题50: 第一个只出现一次的字符
+// 题目一：字符串中第一个只出现一次的字符
+char FirstNotRepeatingChar(const char* pString);
+
+// 题目二：字符流中第一个只出现一次的字符
+class CharStatistics {
+public:
+    CharStatistics() : index(0) {
+        for (int i = 0; i < 256; ++i)
+            occurrence[i] = -1;
+    }
+
+    void Insert(char ch) {
+        if (occurrence[(unsigned char) ch] == -1)
+            occurrence[(unsigned char) ch] = index;
+        else if (occurrence[(unsigned char) ch] >= 0)
+            occurrence[(unsigned char) ch] = -2;
+
+        ++index;
+    }
+
+    char FirstAppearingOnce(void) {
+        char ch = '\0';
+        int minIndex = std::numeric_limits<int>::max();
+
+        for (int i = 0; i < 256; ++i) {
+            if (occurrence[i] >= 0 && occurrence[i] < minIndex) {
+                ch = (char) i;
+                minIndex = occurrence[i];
+            }
+        }
+
+        return ch;
+    }
+
+private:
+    int index;
+    int occurrence[256];
+};
+
 // 面试题51: 数组中的逆序对
+int InversePairs(int* data, int length);
+
 // 面试题52: 两个链表的第一个公共节点
+ListNode* FindFirstCommonNode(ListNode* pHead1, ListNode* pHead2);
 
 #endif

@@ -80,6 +80,16 @@
         "memory_resource": "cpp",
         "ranges": "cpp",
         "stop_token": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "__functional_03": "cpp",
+        "cassert": "cpp",
+        "ccomplex": "cpp",
+        "cerrno": "cpp",
+        "cfloat": "cpp",
+        "ciso646": "cpp",
+        "climits": "cpp",
+        "ctgmath": "cpp",
+        "cstdbool": "cpp",
+        "*.inc": "cpp"
     }
 }
