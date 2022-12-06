@@ -392,4 +392,90 @@ int InversePairs(int* data, int length);
 // 面试题52: 两个链表的第一个公共节点
 ListNode* FindFirstCommonNode(ListNode* pHead1, ListNode* pHead2);
 
+// 6.3 知识迁移能力
+// 面试题53: 在排序数组中查找数字
+// 题目一：数字在排序数组中出现的次数
+int GetNumberOfK(int* data, int length, int k);
+
+// 题目二：0~n-1中缺失的数字
+int GetMissingNumber(const int* numbers, int length);
+
+// 题目三：数组中数值和下标相等的元素
+int GetNumberSameAsIndex(const int* numbers, int length);
+
+// 面试题54: 二叉搜索树的第k大节点
+BinaryTreeNode* KthNode(BinaryTreeNode* pRoot, unsigned int k);
+
+// 面试题55: 二叉树的深度
+// 题目一：二叉树的深度
+int TreeDepth(BinaryTreeNode* pRoot);
+
+// 题目二：平衡二叉树
+bool IsBalanced(BinaryTreeNode* pRoot);
+
+// 面试题56: 数组中数字出现的次数
+// 题目一: 数组中只出现一次的两个数字
+void FindNumsAppearOnce(int data[], int length, int* num1, int *num2);
+
+// 题目二: 数组中唯一只出现一次的数字
+int FindNumberAppearingOnce(int numbers[], int length);
+
+// 面试题57: 和为s的数字
+// 题目一：和为s的两个数字
+bool FindNumbersWithSum(int data[], int length, int sum, int* num1, int* num2);
+
+// 题目二：和为s的连续正数序列
+std::vector<std::vector<int>> FindContinuesSequence(int sum);
+
+// 面试题58：翻转字符串
+// 题目一：翻转单词顺序
+char* ReverseSentence(char* pData);
+
+// 题目二：左旋转字符串
+char* LeftRotateString(char* pStr, int n);
+
+// 面试题59：队列的最大值
+// 题目一：滑动窗口的最大值
+std::vector<int> maxInWindows(const std::vector<int>& num, unsigned int size);
+
+// 题目二：队列的最大值
+template <typename T>
+class QueueWithMax {
+public:
+    QueueWithMax() : currentIndex(0) {}
+
+    void push_back(T number) {
+        while (!maximums.empty() && number >= maximums.back().number)
+            maximums.pop_back();
+        
+        InternalData internalData = { number, currentIndex };
+        data.push_back(internalData);
+        maximums.push_back(internalData);
+        currentIndex++;
+    }
+
+    void pop_front() {
+        if (maximums.empty())
+            throw "queue is empty";
+
+        if (maximums.front().index == data.front().index)
+            maximums.pop_back();
+ 
+        data.pop_back();
+    }
+
+    T max() const {
+        if (maximums.empty())
+            throw "queue is empty";
+        
+        return maximums.front().number;
+    }
+
+private:
+    struct InternalData { T number; int index;};
+    std::deque<InternalData> data;
+    std::deque<InternalData> maximums;
+    int currentIndex;
+};
+
 #endif

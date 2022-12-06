@@ -3,6 +3,7 @@
 #include <queue>
 #include <exception>
 #include <cmath>
+#include <deque>
 using namespace std;
 
 CMyString::CMyString(char *pData) : m_pData(nullptr) {
@@ -1631,4 +1632,354 @@ ListNode* FindFirstCommonNode(ListNode* pHead1, ListNode* pHead2) {
     }
 
     return pNode1->m_pNext;
+}
+
+static int GetFirstK(int* data, int length, int k) {
+    int left = 0;
+    int right = length - 1;
+
+    while (left < right) {
+        int middle = (left + right) / 2;
+        if (data[middle] >= k)
+            right = middle;
+        else
+            left = middle + 1;
+    }
+
+    return left;
+}
+
+static int GetLastK(int* data, int length, int k) {
+    int left = 0;
+    int right = length - 1;
+
+    while (left < right) {
+        int middle = (left + right) / 2;
+        if (data[middle] <= k)
+            left = middle;
+        else
+            right = middle - 1;
+    }
+
+    return left;
+}
+
+int GetNumberOfK(int* data, int length, int k) {
+    if (!data || length <= 0)
+        return 0;
+ 
+    int iFirst = GetFirstK(data, length, k);
+    int iLast = GetLastK(data, length, k);
+    return iLast - iFirst + 1;
+}
+
+int GetMissingNumber(const int* numbers, int length) {
+    if (!numbers || length <= 0)
+        return -1;
+
+    int left = 0;
+    int right = length - 1;
+    int middle = 0;
+    
+    while (left <= right) {
+        middle = (left + right) / 2;
+        if (numbers[middle] != middle) {
+            if (middle == 0 || numbers[middle - 1] == middle - 1)
+                return middle;
+            right = middle - 1;
+        }
+        else
+            left = middle + 1;
+    }
+
+    if (left == length)
+        return length;
+ 
+    return -1;
+}
+
+int GetNumberSameAsIndex(const int* numbers, int length) {
+    if (!numbers || length <= 0)
+        return -1;
+
+    int left = 0;
+    int right = length - 1;
+
+    while (left <= right) {
+        int middle = (right + left) >> 1;
+        if (numbers[middle] > middle)
+            right = middle - 1;
+        else if (numbers[middle] < middle)
+            left = middle + 1;
+        else
+            return middle;
+    }
+ 
+    return -1;
+}
+
+static BinaryTreeNode* KthNodeCore(BinaryTreeNode* pRoot, unsigned int& k) {
+    BinaryTreeNode* target = nullptr;
+
+    if (pRoot->m_pLeft)
+        target = KthNodeCore(pRoot->m_pLeft, k);
+ 
+    if (target == nullptr) {
+        if (k == 1)
+            target = pRoot;
+        k--;
+    }
+
+    if (target == nullptr && pRoot->m_pRight != nullptr)
+        target = KthNodeCore(pRoot->m_pRight, k);
+
+    return target;
+}
+
+BinaryTreeNode* KthNode(BinaryTreeNode* pRoot, unsigned int k) {
+    if (!pRoot || k == 0)
+        return nullptr;
+    
+    return KthNodeCore(pRoot, k);
+}
+
+int TreeDepth(BinaryTreeNode* pRoot) {
+    if (!pRoot)
+        return 0;
+
+    int left = TreeDepth(pRoot->m_pLeft) + 1;
+    int right = TreeDepth(pRoot->m_pRight) + 1;
+
+    return left > right ? left : right;
+}
+
+static bool IsBalanced(BinaryTreeNode* pRoot, int* pDepth) {
+    if (!pRoot) {
+        *pDepth = 0;
+        return true;
+    }
+
+    int left, right;
+    if (IsBalanced(pRoot->m_pLeft, &left) && IsBalanced(pRoot->m_pRight, &right)) {
+        if (std::abs(left - right) <= 1) {
+            *pDepth = 1 + (left > right ? left : right);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool IsBalanced(BinaryTreeNode* pRoot) {
+#if 0
+    if (!pRoot)
+        return true;
+ 
+    int left = TreeDepth(pRoot->m_pLeft);
+    int right = TreeDepth(pRoot->m_pRight);
+    if (std::abs(left - right) > 1)
+        return false;
+ 
+    return IsBalanced(pRoot->m_pLeft) && IsBalanced(pRoot->m_pRight);
+#else
+    int depth = 0;
+    return IsBalanced(pRoot, &depth);
+#endif
+}
+
+static unsigned int FindFirstBitIs1(int x) {
+    unsigned int index = 0;
+    
+    while ((x & 1) == 0 && (index < 8 * sizeof(int))) {
+        x >>= 1;
+        index++;
+    }
+
+    return index;
+}
+
+void FindNumsAppearOnce(int data[], int length, int* num1, int *num2) {
+    if (!data || length <= 1)
+        return;
+
+    int x = 0;
+    for (int i = 0; i < length; ++i)
+        x ^= data[i];
+    
+    unsigned int indexOf1 = FindFirstBitIs1(x);
+ 
+    *num1 = *num2 = 0;
+    for (int i = 0; i < length; ++i) {
+        if ((data[i] >> indexOf1) & 1)
+            *num1 ^= data[i];
+        else
+            *num2 ^= data[i];
+    }
+}
+
+int FindNumberAppearingOnce(int numbers[], int length) {
+    if (!numbers || length <= 0)
+        throw "Invalid Input";
+ 
+    int bitsum[32] = {0};
+    for (int i = 0; i < length; ++i) {
+        int mask = 1;
+        for (int j = 31; j >= 0; --j) {
+            if (numbers[i] & mask)
+                bitsum[j]++;
+            mask <<= 1;
+        }
+    }
+
+    int result = 0;
+    for (int i = 0; i < 32; ++i) {
+        result <<= 1;
+        result += bitsum[i] % 3;
+    }
+ 
+    return result;
+}
+
+bool FindNumbersWithSum(int data[], int length, int sum, int* num1, int* num2) {
+    if (!data || length < 2 || !num1 || !num2)
+        return false;
+ 
+    int left = 0, right = length - 1;
+    while (left < right) {
+        int cursum = data[left] + data[right];
+        if (cursum == sum) {
+            *num1 = data[left];
+            *num2 = data[right];
+            return true;
+        } else if (cursum > sum) {
+            --right;
+        } else {
+            ++left;
+        }
+    }
+ 
+    return false;
+}
+
+static void InsertSequence(std::vector<std::vector<int>>& seqs, int left, int right) {
+    std::vector<int> tmp;
+ 
+    while (left <= right)
+        tmp.push_back(left++);
+
+    seqs.push_back(tmp);
+}
+
+std::vector<std::vector<int>> FindContinuesSequence(int sum) {
+    std::vector<std::vector<int>> result;
+ 
+    if (sum < 3)
+        return result;
+ 
+    int left = 1, right = 2;
+    int cursum = 3;
+    int middle = (sum + 1) / 2;
+
+    while (left < middle) {
+        if (cursum == sum)
+            InsertSequence(result, left, right);
+        
+        while (left < middle && cursum > sum) {
+            cursum -= left;
+            ++left;
+
+            if (cursum == sum)
+                InsertSequence(result, left, right);
+        }
+
+        ++right;
+        cursum += right;
+    }
+ 
+    return result;
+}
+
+static void Reverse(char* pBegin, char* pEnd) {
+    if (!pBegin || !pEnd)
+        return;
+    
+    while (pBegin < pEnd) {
+        char tmp = *pBegin;
+        *pBegin = *pEnd;
+        *pEnd = tmp;
+
+        ++pBegin;
+        --pEnd;
+    }
+}
+
+char* ReverseSentence(char* pData) {
+    if (!pData)
+        return nullptr;
+ 
+    char* pBegin = pData;
+    char* pEnd = pData;
+    while (*pEnd != '\0')
+        pEnd++;
+    pEnd--;
+
+    Reverse(pBegin, pEnd);
+    
+    pBegin = pEnd = pData;
+    while (*pBegin != '\0') {
+        if (*pBegin == ' ') {
+            pBegin++;
+            pEnd++;
+        } else if (*pEnd == ' ' || *pEnd == '\0') {
+            Reverse(pBegin, pEnd - 1);
+            pBegin = pEnd;
+        } else {
+            pEnd++;
+        }
+    }
+ 
+    return pData;
+}
+
+char* LeftRotateString(char* pStr, int n) {
+    if (pStr != nullptr) {
+        int iLength = static_cast<int>(strlen(pStr));
+        if (iLength > 0 && n > 0 && n < iLength) {
+            Reverse(pStr, pStr + n - 1);
+            Reverse(pStr + n, pStr + iLength - 1);
+            Reverse(pStr, pStr + iLength - 1);
+        }
+    }
+
+    return pStr;
+}
+
+std::vector<int> maxInWindows(const std::vector<int>& num, unsigned int size) {
+    vector<int> result;
+ 
+    if (num.size() >= size && size >= 1) {
+        deque<int> index;
+
+        for (unsigned int i = 0; i < size; ++i) {
+            while (!index.empty() && num[i] >= num[index.back()])
+                index.pop_back();
+
+            index.push_back(i);
+        }
+
+        for (unsigned int i = size; i < num.size(); ++i) {
+            result.push_back(num[index.front()]);
+
+            while (!index.empty() && num[i] >= num[index.back()])
+                index.pop_back();
+            if (!index.empty() && index.front() <= (int) (i - size))
+                index.pop_front();
+
+            index.push_back(i);
+        }
+
+        result.push_back(num[index.front()]);
+    }
+
+    return result;
 }

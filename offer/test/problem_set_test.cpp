@@ -1009,3 +1009,129 @@ TEST(P52_FindFirstCommonNode, WHEN_valid_DO_Find_THEN_eq) {
 
     EXPECT_EQ(FindFirstCommonNode(&ln1, &ln4), &ln6);
 }
+
+TEST(P53_GetNumberOfK, WHEN_12333345_DO_Get_THEN_4) {
+    int data[] = {1,2,3,3,3,3,4,5};
+    EXPECT_EQ(GetNumberOfK(data, sizeof(data) / sizeof(int), 3), 4);
+}
+
+TEST(P53_GetMissingNumber, WHEN_Miss5_DO_Get_THEN_5) {
+    int numbers[] = {0,1,2,3,4,6,7,8};
+    EXPECT_EQ(GetMissingNumber(numbers, sizeof(numbers) / sizeof(int)), 5);
+}
+
+TEST(P53_GetNumberSameAsIndex, WHEN_Same3_DO_Get_THEN_3) {
+    int numbers[] = {-3,-1,1,3,5};
+    EXPECT_EQ(GetNumberSameAsIndex(numbers, sizeof(numbers) / sizeof(int)), 3);
+}
+
+TEST(P54_KthNode, WHEN_valid_DO_GetK_THEN_eq) {
+    BinaryTreeNode node2(2);
+    BinaryTreeNode node4(4);
+    BinaryTreeNode node6(6);
+    BinaryTreeNode node8(8);
+    BinaryTreeNode node3(3, &node2, &node4);
+    BinaryTreeNode node7(7, &node6, &node8);
+    BinaryTreeNode node5(5, &node3, &node7);
+
+    EXPECT_EQ(KthNode(&node5, 3), &node4);
+}
+
+TEST(P55_TreeDepth, WHEN_valid_DO_TreeDepth_THEN_eq) {
+    BinaryTreeNode node7(7);
+    BinaryTreeNode node4(4);
+    BinaryTreeNode node5(5, &node7, nullptr);
+    BinaryTreeNode node6(6);
+    BinaryTreeNode node2(2, &node4, &node5);
+    BinaryTreeNode node3(3, nullptr, &node6);
+    BinaryTreeNode node1(1, &node2, &node3);
+
+    EXPECT_EQ(TreeDepth(&node1), 4);
+}
+
+TEST(P55_IsBalanced, WHEN_valid_DO_IsBalanced_THEN_true) {
+    BinaryTreeNode node7(7);
+    BinaryTreeNode node4(4);
+    BinaryTreeNode node5(5, &node7, nullptr);
+    BinaryTreeNode node6(6);
+    BinaryTreeNode node2(2, &node4, &node5);
+    BinaryTreeNode node3(3, nullptr, &node6);
+    BinaryTreeNode node1(1, &node2, &node3);
+
+    EXPECT_TRUE(IsBalanced(&node1));
+}
+
+TEST(P56_FindNumsAppearOnce, WHEN_valid_DO_Find_THEN_eq) {
+    int data[] = {2,4,3,6,3,2,5,5};
+    int length = (int) (sizeof(data) / sizeof(int));
+    int num1 = 0, num2 = 0;
+
+    FindNumsAppearOnce(data, length, &num1, &num2);
+
+    EXPECT_EQ(num1, 6);
+    EXPECT_EQ(num2, 4);
+}
+
+TEST(P56_FindNumberAppearingOnce, WHEN_valid_DO_Find_THEN_eq) {
+    int numbers[] = {3,1,4,6,4,1,6,6,4,1};
+    int length = (int) (sizeof(numbers) / sizeof(int));
+
+    EXPECT_EQ(FindNumberAppearingOnce(numbers, length), 3);
+}
+
+TEST(P57_FindNumbersWithSum, WHEN_valid_DO_Find_THEN_eq) {
+    int data[] = {1,2,4,7,11,15};
+    int length = (int) (sizeof(data) / sizeof(int));
+    int num1 = 0, num2 = 0;
+
+    EXPECT_TRUE(FindNumbersWithSum(data, length, 15, &num1, &num2));
+    EXPECT_EQ(num1, 4);
+    EXPECT_EQ(num2, 11);
+}
+
+TEST(P57_FindContinuesSequence, WHEN_valid_DO_Find_THEN_eq) {
+    std::vector<std::vector<int>> expect = {{1,2,3,4,5}, {4,5,6}, {7,8}};
+ 
+    EXPECT_EQ(FindContinuesSequence(15), expect);
+}
+
+TEST(P58_ReverseSentence, WHEN_valid_DO_reverse_THEN_eq) {
+    char data[] = "I am a student.";
+
+    ReverseSentence(data);
+
+    EXPECT_EQ(strcmp(data, "student. a am I"), 0);
+}
+
+TEST(P58_LeftRotateString, WHEN_valid_DO_rotate_THEN_eq) {
+    char data[] = "abcdefg";
+ 
+    char* pResult = LeftRotateString(data, 2);
+
+    EXPECT_EQ(strcmp(pResult, "cdefgab"), 0);
+}
+
+TEST(P59_maxInWindows, WHEN_3_DO_maxInWindows_THEN_eq) {
+    std::vector<int> num{2,3,4,2,6,2,5,1};
+    std::vector<int> expect{4,4,6,6,6,5};
+ 
+    auto result = maxInWindows(num, 3);
+
+    EXPECT_EQ(result, expect);
+}
+
+TEST(P59_QueueWithMax, WHEN_valid_DO_QueueWithMax_THEN_eq) {
+    QueueWithMax<int> qwm;
+
+    qwm.push_back(1);
+    qwm.push_back(2);
+    qwm.push_back(3);
+
+    EXPECT_EQ(qwm.max(), 3);
+
+    qwm.pop_front();
+    EXPECT_EQ(qwm.max(), 3);
+
+    qwm.push_back(4);
+    EXPECT_EQ(qwm.max(), 4);
+}
