@@ -90,6 +90,7 @@
         "climits": "cpp",
         "ctgmath": "cpp",
         "cstdbool": "cpp",
-        "*.inc": "cpp"
+        "*.inc": "cpp",
+        "list": "cpp"
     }
 }

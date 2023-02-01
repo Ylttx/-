@@ -4,6 +4,7 @@
 #include <exception>
 #include <cmath>
 #include <deque>
+#include <list>
 using namespace std;
 
 CMyString::CMyString(char *pData) : m_pData(nullptr) {
@@ -1982,4 +1983,154 @@ std::vector<int> maxInWindows(const std::vector<int>& num, unsigned int size) {
     }
 
     return result;
+}
+
+const static int ciMaxValue = 6;
+
+void Probability(int origin, int current, int sum, int* pProbabilities) {
+    if (current == 1)
+        pProbabilities[sum - origin]++;
+    else
+        for (int i = 1; i <= ciMaxValue; ++i)
+            Probability(origin, current - 1, i + sum, pProbabilities);
+}
+
+void Probability(int n, int* pProbabilities) {
+    for (int i = 1; i <= ciMaxValue; ++i)
+        Probability(n, n, i, pProbabilities);
+}
+
+std::vector<double> PrintProbability(int n) {
+    vector<double> res;
+ 
+    if (n < 1)
+        return res;
+
+    int maxSum = n * ciMaxValue;
+    int* pProbabilities = new int[maxSum - n + 1];
+    memset(pProbabilities, 0, (maxSum - n + 1) * sizeof(int));
+
+    Probability(n, pProbabilities);
+
+    int total = std::pow(ciMaxValue, n);
+    for (int i = n; i <= maxSum; ++i) {
+        double ratio = (double) pProbabilities[i - n] / total;
+        res.push_back(ratio);
+    }
+ 
+    delete[] pProbabilities;
+    return res;
+}
+
+std::vector<double> PrintProbabilityIteratively(int n) {
+    vector<double> res;
+ 
+    if (n < 1)
+        return res;
+ 
+    int* pProbabilities[2];
+    int length = ciMaxValue * n + 1;
+    pProbabilities[0] = new int[length];
+    pProbabilities[1] = new int[length];
+    for (int i = 0; i < length; ++i) {
+        pProbabilities[0][i] = 0;
+        pProbabilities[1][i] = 0;
+    }
+
+    int flag = 0;
+    for (int i = 1; i <= ciMaxValue; ++i)
+        pProbabilities[flag][i] = 1;
+
+    for (int k = 2; k <= n; ++k) {
+        for (int i = 0; i < k; ++i)
+            pProbabilities[1 - flag][i] = 0;
+        
+        for (int i = k; i <= ciMaxValue * k; ++i) {
+            pProbabilities[1 - flag][i] = 0;
+            for (int j = 1; j <= ciMaxValue && j <= i; ++j)
+                pProbabilities[1 - flag][i] += pProbabilities[flag][i - j];
+        }
+
+        flag = 1 - flag;
+    }
+ 
+    int total = std::pow(ciMaxValue, n);
+    for (int i = n; i <= ciMaxValue * n; ++i) {
+        double ratio = (double) pProbabilities[flag][i] / total;
+        res.push_back(ratio);
+    }
+ 
+    delete[] pProbabilities[0];
+    delete[] pProbabilities[1];
+    return res;
+}
+
+bool IsContinuous(int* numbers, int length) {
+    if (!numbers || length < 1)
+        return false;
+
+    qsort(numbers, length, sizeof(int), [](const void* x, const void* y) {
+        return *(int*) x - *(int*) y;
+    });
+
+    int numGap = 0, numZero = 0;
+
+    for (int i = 0; i < length && numbers[i] == 0; ++i)
+        ++numZero;
+ 
+    int small = numZero;
+    int big = small + 1;
+    while (big < length) {
+        if (numbers[small] == numbers[big])
+            return false;
+        
+        numGap += numbers[big] - numbers[small] - 1;
+        ++small;
+        ++big;
+    }
+
+    return (numGap <= numZero);
+}
+
+int LastRemaining(unsigned n, unsigned m) {
+    if (n < 1 || m < 1)
+        return -1;
+    
+    std::list<int> numbers;
+    for (unsigned i = 0; i < n; ++i)
+        numbers.push_back(i);
+    
+    auto it = numbers.begin();
+    while (numbers.size() > 1) {
+        for (unsigned i = 1; i < m; ++i) {
+            ++it;
+            if (it == numbers.end())
+                it = numbers.begin();
+        }
+
+        auto next = ++it;
+        if (next == numbers.end())
+            next = numbers.begin();
+
+        --it;
+        numbers.erase(it);
+        it = next;
+    }
+
+    return *(it);
+}
+
+int MaxDiff(const int* numbers, unsigned length) {
+    if (!numbers || length < 2)
+        return 0;
+ 
+    int min = numbers[0];
+    int max = numbers[1] - min;
+
+    for (unsigned i = 2; i < length; ++i) {
+        min = std::min(min, numbers[i - 1]);
+        max = std::max(max, numbers[i] - min);
+    }
+
+    return max;
 }

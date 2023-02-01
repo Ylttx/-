@@ -1135,3 +1135,52 @@ TEST(P59_QueueWithMax, WHEN_valid_DO_QueueWithMax_THEN_eq) {
     qwm.push_back(4);
     EXPECT_EQ(qwm.max(), 4);
 }
+
+TEST(P60_PrintProbability, WHEN_1_DO_PrintProbability_THEN_eq) {
+    double x = 1.0 / 6;
+    std::vector<double> expect = {x,x,x,x,x,x};
+
+    auto result = PrintProbability(1);
+    EXPECT_EQ(result, expect);
+
+    result = PrintProbabilityIteratively(1);
+    EXPECT_EQ(result, expect);
+}
+
+TEST(P60_PrintProbability, WHEN_2_DO_PrintProbability_THEN_eq) {
+    std::vector<double> expect = {
+        1.0 / 36, 2.0 / 36, 3.0 / 36, 4.0 / 36, 5.0 / 36, 6.0 / 36,
+        5.0 / 36, 4.0 / 36, 3.0 / 36, 2.0 / 36, 1.0 / 36};
+
+    auto result = PrintProbability(2);
+    EXPECT_EQ(result, expect);
+
+    result = PrintProbabilityIteratively(2);
+    EXPECT_EQ(result, expect);
+}
+
+TEST(P61_IsContinuous, WHEN_IsNotContinuous_DO_judge_THEN_false) {
+    int numbers[] = {1,2,3,4,6};
+    EXPECT_FALSE(IsContinuous(numbers, (int) (sizeof(numbers) / sizeof(int))));
+ 
+    numbers[4] = 4;
+    EXPECT_FALSE(IsContinuous(numbers, (int) (sizeof(numbers) / sizeof(int))));
+}
+
+TEST(P61_IsContinuous, WHEN_IsContinuous_DO_judge_THEN_true) {
+    int numbers[] = {1,2,3,4,5};
+    EXPECT_TRUE(IsContinuous(numbers, (int) (sizeof(numbers) / sizeof(int))));
+
+    int numbers2[] = {0,1,2,6,4,5};
+    EXPECT_TRUE(IsContinuous(numbers2, (int) (sizeof(numbers2) / sizeof(int))));
+}
+
+TEST(P62_LastRemaining, WHEN_example_DO_LastRemaining_THEN_eq) {
+    EXPECT_EQ(LastRemaining(5, 3), 3);
+}
+
+TEST(P63_MaxDiff, WHEN_example_DO_maxdiff_THEN_11) {
+    int numbers[] = {9,11,8,5,7,12,16,14};
+
+    EXPECT_EQ(MaxDiff(numbers, (unsigned) (sizeof(numbers) / sizeof(int))), 11);
+}

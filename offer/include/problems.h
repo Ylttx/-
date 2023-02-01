@@ -478,4 +478,18 @@ private:
     int currentIndex;
 };
 
+// 6.4 抽象建模能力
+// 面试题60: n个骰子的点数
+std::vector<double> PrintProbability(int n);
+std::vector<double> PrintProbabilityIteratively(int n);
+
+// 面试题61: 扑克牌中的顺子
+bool IsContinuous(int* numbers, int length);
+
+// 面试题62: 圆圈中最后剩下的数字
+int LastRemaining(unsigned n, unsigned m);
+
+// 面试题63: 股票的最大利润
+int MaxDiff(const int* numbers, unsigned length);
+
 #endif
