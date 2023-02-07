@@ -1184,3 +1184,16 @@ TEST(P63_MaxDiff, WHEN_example_DO_maxdiff_THEN_11) {
 
     EXPECT_EQ(MaxDiff(numbers, (unsigned) (sizeof(numbers) / sizeof(int))), 11);
 }
+
+TEST(P65_Add, WHEN_98and13_DO_Add_THEN_eq) {
+    EXPECT_EQ(Add(98, 13), 98 + 13);
+}
+
+TEST(P66_ConstructMuiltiply, WHEN_valid_DO_ConstructMuiltiply_THEN_eq) {
+    std::vector<double> InArray{1, 2, 3};
+    std::vector<double> OutArray(3);
+    std::vector<double> ExpectArray{6, 3, 2};
+
+    ConstructMuiltiply(InArray, OutArray);
+    EXPECT_EQ(ExpectArray, OutArray);
+}

@@ -492,4 +492,14 @@ int LastRemaining(unsigned n, unsigned m);
 // 面试题63: 股票的最大利润
 int MaxDiff(const int* numbers, unsigned length);
 
+// 6.5 发散思维能力
+// 面试题64: 求1+2+...+n
+// 1、循环：构造函数；2、递归：虚函数；3、递归：函数指针；4、递归：模板
+
+// 面试题65: 不用加减乘除做加法
+int Add(int num1, int num2);
+
+// 面试题66: 构建乘积数组
+void ConstructMuiltiply(const std::vector<double>& InArray, std::vector<double>& OutArray);
+
 #endif

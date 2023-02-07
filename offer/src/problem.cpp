@@ -2134,3 +2134,35 @@ int MaxDiff(const int* numbers, unsigned length) {
 
     return max;
 }
+
+int Add(int num1, int num2) {
+    int sum = 0;
+    int carry = 0;
+
+    do {
+        sum = num1 ^ num2;
+        carry = (num1 & num2) << 1;
+        num1 = sum;
+        num2 = carry;
+    } while (num2 != 0);
+
+    return num1;
+}
+
+void ConstructMuiltiply(const std::vector<double>& InArray, std::vector<double>& OutArray)
+{
+    int length = (int) InArray.size();
+    if (length != (int) OutArray.size() || length <= 1)
+        return;
+    
+    OutArray[0] = 1;
+    for (int i = 1; i < length; ++i) {
+        OutArray[i] = OutArray[i - 1] * InArray[i - 1];
+    }
+
+    double temp = 1;
+    for (int i = length - 2; i >= 0; --i) {
+        temp *= InArray[i + 1];
+        OutArray[i] *= temp;
+    }
+}
